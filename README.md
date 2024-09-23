@@ -1,1 +1,1 @@
-This is the start of our project
+This is the start of our project.
