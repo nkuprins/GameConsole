@@ -114,20 +114,36 @@ void loop(void)
 {
   sensors_event_t event;
   bno.getEvent(&event);
+  
+  // z: 30 then LEFT
+  // z: -30 then RIGHT
+  // y: 30 then UP
+  // y: -30 then DOWN
+  int z = event.orientation.z;
+  int y = event.orientation.y;
+  if (z >= 30) {
+    Serial.println("LEFT");
+  } else if (z <= -30) {
+    Serial.println("RIGHT");
+  }
 
-  Serial.print("X: ");
-  Serial.print(event.orientation.x, 4);
-  Serial.print("\tY: ");
-  Serial.print(event.orientation.y, 4);
-  Serial.print("\tZ: ");
-  Serial.print(event.orientation.z, 4);
+  if (y >= 30) {
+    Serial.println("UP");
+  } else if (y <= -30) {
+    Serial.println("DOWN");
+  }  
 
-  displayCalStatus();
+//  Serial.print("X: ");
+//  Serial.print(event.orientation.x, 4);
+//  Serial.print("\tY: ");
+//  Serial.print(event.orientation.y, 4);
+//  Serial.print("\tZ: ");
+//  Serial.print(event.orientation.z, 4);
+
+//  displayCalStatus();
 
   /* Optional: Display sensor status (debug only) */
   //displaySensorStatus();
-
-  Serial.println("");
 
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
