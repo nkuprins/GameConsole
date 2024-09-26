@@ -10,7 +10,7 @@
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
-const char* server = "192.168.1.35";
+const char* server = "http://192.168.1.35";
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
@@ -102,14 +102,14 @@ void connectToWifi() {
     delay(500);
     Serial.print(".");
   }
- 
-  Serial.print("Connected to ");
+  Serial.println();
+  Serial.println("Connected to Wifi");
 }
 
 void sendHttpRequest() {
   if (WiFi.status() == WL_CONNECTED) {
 //    String url = String(server) + "/?direction=" + direction;
-    String url = String(server);
+    String url = String(server) + "/";
     http.begin(client, url);
     int httpCode = http.GET();
     if (httpCode > 0) { 
