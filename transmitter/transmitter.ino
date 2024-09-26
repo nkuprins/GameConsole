@@ -2,11 +2,20 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
+
+const char* server = "192.168.1.35";
+const char* ssid = "NDL_24G";
+const char* password = "RT-AC66U"; 
+
+WiFiClient client;
+HTTPClient http;
 
 /**************************************************************************/
 /*
@@ -86,12 +95,43 @@ void displayCalStatus(void)
   Serial.print(mag, DEC);
 }
 
+void connectToWifi() {
+  WiFi.begin(ssid, password); // Start Wi-Fi connection to specified access point
+  Serial.println("Start connecting.");
+  while (WiFi.status() != WL_CONNECTED) { // Wait until we are connected
+    delay(500);
+    Serial.print(".");
+  }
+ 
+  Serial.print("Connected to ");
+}
+
+void sendHttpRequest() {
+  if (WiFi.status() == WL_CONNECTED) {
+//    String url = String(server) + "/?direction=" + direction;
+    String url = String(server);
+    http.begin(client, url);
+    int httpCode = http.GET();
+    if (httpCode > 0) { 
+      String payload = http.getString();
+      Serial.println(payload); 
+    } else {
+      Serial.printf("Error in HTTP request: %d\n", httpCode);
+    }
+    http.end();
+  } else {
+    Serial.println("WiFi Disconnected");
+  }
+}
+
 void setup(void)
 {
   Serial.begin(115200);
 
   while (!Serial)
     delay(10);
+
+  connectToWifi();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
@@ -123,8 +163,10 @@ void loop(void)
   int y = event.orientation.y;
   if (z >= 30) {
     Serial.println("LEFT");
+    sendHttpRequest();
   } else if (z <= -30) {
     Serial.println("RIGHT");
+    sendHttpRequest();
   }
 
   if (y >= 30) {
