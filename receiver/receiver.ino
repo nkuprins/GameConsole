@@ -33,6 +33,7 @@ void connectToWifi() {
 void hanleConnection() {
   server.on("/", [](){
     Serial.println("RECEIVED 382u8932784984902384902");
+    server.send(200, "text/plain", "Request received!");
   });
 }
 
