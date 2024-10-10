@@ -14,6 +14,8 @@ const char* server = "http://192.168.1.35";
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
+bool inPos = false;
+
 WiFiClient client;
 HTTPClient http;
 
@@ -124,6 +126,33 @@ void sendHttpRequest() {
   }
 }
 
+void checkPos(sensors_event_t event) {
+
+  int z = event.orientation.z;
+  int y = event.orientation.y;
+
+  if (z < 15 && z > -15) {
+    inPos = false;
+  }
+
+  if (inPos) {
+    return;
+  }
+  
+  
+  if (z >= 30) {
+    Serial.println("LEFT");
+    sendHttpRequest();
+    inPos = true;
+  } else if (z <= -30) {
+    Serial.println("RIGHT");
+    sendHttpRequest();
+    inPos = true;
+  }
+}
+
+
+
 void setup(void)
 {
   Serial.begin(115200);
@@ -159,21 +188,10 @@ void loop(void)
   // z: -30 then RIGHT
   // y: 30 then UP
   // y: -30 then DOWN
-  int z = event.orientation.z;
-  int y = event.orientation.y;
-  if (z >= 30) {
-    Serial.println("LEFT");
-    sendHttpRequest();
-  } else if (z <= -30) {
-    Serial.println("RIGHT");
-    sendHttpRequest();
-  }
+  
+  checkPos(event);
 
-  if (y >= 30) {
-    Serial.println("UP");
-  } else if (y <= -30) {
-    Serial.println("DOWN");
-  }  
+  
 
 //  Serial.print("X: ");
 //  Serial.print(event.orientation.x, 4);
