@@ -10,7 +10,7 @@
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
-const char* server = "http://192.168.1.35";
+const char* server = "http://192.168.1.60";
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
@@ -108,10 +108,10 @@ void connectToWifi() {
   Serial.println("Connected to Wifi");
 }
 
-void sendHttpRequest() {
+void sendHttpRequest(String direction) {
   if (WiFi.status() == WL_CONNECTED) {
-//    String url = String(server) + "/?direction=" + direction;
-    String url = String(server) + "/";
+    String url = String(server) + "/?direction=" + direction;
+//    String url = String(server) + "/";
     http.begin(client, url);
     int httpCode = http.GET();
     if (httpCode > 0) { 
@@ -142,11 +142,11 @@ void checkPos(sensors_event_t event) {
   
   if (z >= 30) {
     Serial.println("LEFT");
-    sendHttpRequest();
+    sendHttpRequest("LEFT");
     inPos = true;
   } else if (z <= -30) {
     Serial.println("RIGHT");
-    sendHttpRequest();
+    sendHttpRequest("RIGHT");
     inPos = true;
   }
 }
