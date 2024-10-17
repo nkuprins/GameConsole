@@ -1,6 +1,6 @@
 import wifi
 import socketpool
-import asyncio
+import _asyncio
 
 SSID = "NDL_24G"
 PASSWORD = "RT-AC66U"
@@ -14,7 +14,7 @@ def handle_request(conn):
     bytes_received = conn.recv_into(buffer)
     if bytes_received == 0:
         print("No bytes received")
-        break
+        return
     request = buffer[:bytes_received].decode('utf-8')
     print("Request:", request)
 

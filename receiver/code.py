@@ -1,4 +1,4 @@
-import asyncio
+import _asyncio as asyncio
 import matrix
 import server
 
@@ -12,4 +12,9 @@ async def main():
     except KeyboardInterrupt:
         server.shutdown_server(server_socket)
 
-asyncio.run(main())
+#asyncio.run(main())
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(main())
+finally:
+    loop.close()
