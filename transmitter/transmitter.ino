@@ -181,6 +181,10 @@ void setup(void)
 
 void loop(void)
 {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Reconnecting to WiFi...");
+    connectToWifi();
+  }
   sensors_event_t event;
   bno.getEvent(&event);
   
