@@ -3,21 +3,20 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
-const char* server = "http://192.168.1.60";
+const char* server = "192.168.1.60";
+const uint16_t port = 80;
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
 bool inPos = false;
 
 WiFiClient client;
-HTTPClient http;
 
 /**************************************************************************/
 /*
@@ -48,12 +47,10 @@ void displaySensorDetails(void)
 /**************************************************************************/
 void displaySensorStatus(void)
 {
-  /* Get the system status values (mostly for debugging purposes) */
   uint8_t system_status, self_test_results, system_error;
   system_status = self_test_results = system_error = 0;
   bno.getSystemStatus(&system_status, &self_test_results, &system_error);
 
-  /* Display the results in the Serial Monitor */
   Serial.println("");
   Serial.print("System Status: 0x");
   Serial.println(system_status, HEX);
@@ -72,21 +69,16 @@ void displaySensorStatus(void)
 /**************************************************************************/
 void displayCalStatus(void)
 {
-  /* Get the four calibration values (0..3) */
-  /* Any sensor data reporting 0 should be ignored, */
-  /* 3 means 'fully calibrated" */
   uint8_t system, gyro, accel, mag;
   system = gyro = accel = mag = 0;
   bno.getCalibration(&system, &gyro, &accel, &mag);
 
-  /* The data should be ignored until the system calibration is > 0 */
   Serial.print("\t");
   if (!system)
   {
     Serial.print("! ");
   }
 
-  /* Display the individual values */
   Serial.print("Sys:");
   Serial.print(system, DEC);
   Serial.print(" G:");
@@ -98,38 +90,36 @@ void displayCalStatus(void)
 }
 
 void connectToWifi() {
-  WiFi.begin(ssid, password); // Start Wi-Fi connection to specified access point
-  Serial.println("Start connecting.");
-  while (WiFi.status() != WL_CONNECTED) { // Wait until we are connected
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi...");
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println();
-  Serial.println("Connected to Wifi");
+  Serial.println("Connected to WiFi");
 }
 
-void sendHttpRequest(String direction) {
-  if (WiFi.status() == WL_CONNECTED) {
-    String url = String(server) + "/?direction=" + direction;
-//    String url = String(server) + "/";
-    http.begin(client, url);
-    int httpCode = http.GET();
-    if (httpCode > 0) { 
-      String payload = http.getString();
-      Serial.println(payload); 
+void connectToServer() {
+  if (!client.connected()) {
+    Serial.println("Connecting to server...");
+    if (client.connect(server, port)) {
+      Serial.println("Connected to server");
     } else {
-      Serial.printf("Error in HTTP request: %d\n", httpCode);
+      Serial.println("Failed to connect to server");
     }
-    http.end();
-  } else {
-    Serial.println("WiFi Disconnected");
+  }
+}
+
+void sendDirection(String direction) {
+  if (client.connected()) {
+    client.print(direction);
+    Serial.println("Sent: " + direction);
   }
 }
 
 void checkPos(sensors_event_t event) {
-
   int z = event.orientation.z;
-  int y = event.orientation.y;
 
   if (z < 15 && z > -15) {
     inPos = false;
@@ -139,36 +129,30 @@ void checkPos(sensors_event_t event) {
     return;
   }
   
-  
   if (z >= 30) {
     Serial.println("LEFT");
-    sendHttpRequest("LEFT");
+    sendDirection("LEFT");
     inPos = true;
   } else if (z <= -30) {
     Serial.println("RIGHT");
-    sendHttpRequest("RIGHT");
+    sendDirection("RIGHT");
     inPos = true;
   }
 }
 
-
-
-void setup(void)
-{
+void setup(void) {
   Serial.begin(115200);
-
-  while (!Serial)
-    delay(10);
+  while (!Serial) delay(10);
 
   connectToWifi();
+  connectToServer();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
 
-  if(!bno.begin())
-  {
+  if (!bno.begin()) {
     Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-    while(1);
+    while (1);
   }
 
   delay(1000);
@@ -179,35 +163,19 @@ void setup(void)
   bno.setExtCrystalUse(true);
 }
 
-void loop(void)
-{
+void loop(void) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Reconnecting to WiFi...");
     connectToWifi();
   }
+  if (!client.connected()) {
+    connectToServer();
+  }
+
   sensors_event_t event;
   bno.getEvent(&event);
-  
-  // z: 30 then LEFT
-  // z: -30 then RIGHT
-  // y: 30 then UP
-  // y: -30 then DOWN
-  
+
   checkPos(event);
-
-  
-
-//  Serial.print("X: ");
-//  Serial.print(event.orientation.x, 4);
-//  Serial.print("\tY: ");
-//  Serial.print(event.orientation.y, 4);
-//  Serial.print("\tZ: ");
-//  Serial.print(event.orientation.z, 4);
-
-//  displayCalStatus();
-
-  /* Optional: Display sensor status (debug only) */
-  //displaySensorStatus();
 
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
