@@ -6,6 +6,8 @@
 
 /* Set the delay between fresh samples */
 #define BNO055_SAMPLERATE_DELAY_MS (100)
+#define TRIGGER_ANGLE 30
+#define DEFAULT_ANGLE 15
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
@@ -14,90 +16,19 @@ const uint16_t port = 80;
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
-bool inPos = false;
+bool in_default = false;
 
 WiFiClient client;
 
-/**************************************************************************/
-/*
-    Displays some basic information on this sensor from the unified
-    sensor API sensor_t type (see Adafruit_Sensor for more information)
-*/
-/**************************************************************************/
-void displaySensorDetails(void)
-{
-  sensor_t sensor;
-  bno.getSensor(&sensor);
-  Serial.println("------------------------------------");
-  Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-  Serial.print  ("Driver Ver:   "); Serial.println(sensor.version);
-  Serial.print  ("Unique ID:    "); Serial.println(sensor.sensor_id);
-  Serial.print  ("Max Value:    "); Serial.print(sensor.max_value); Serial.println(" xxx");
-  Serial.print  ("Min Value:    "); Serial.print(sensor.min_value); Serial.println(" xxx");
-  Serial.print  ("Resolution:   "); Serial.print(sensor.resolution); Serial.println(" xxx");
-  Serial.println("------------------------------------");
-  Serial.println("");
-  delay(500);
-}
-
-/**************************************************************************/
-/*
-    Display some basic info about the sensor status
-*/
-/**************************************************************************/
-void displaySensorStatus(void)
-{
-  uint8_t system_status, self_test_results, system_error;
-  system_status = self_test_results = system_error = 0;
-  bno.getSystemStatus(&system_status, &self_test_results, &system_error);
-
-  Serial.println("");
-  Serial.print("System Status: 0x");
-  Serial.println(system_status, HEX);
-  Serial.print("Self Test:     0x");
-  Serial.println(self_test_results, HEX);
-  Serial.print("System Error:  0x");
-  Serial.println(system_error, HEX);
-  Serial.println("");
-  delay(500);
-}
-
-/**************************************************************************/
-/*
-    Display sensor calibration status
-*/
-/**************************************************************************/
-void displayCalStatus(void)
-{
-  uint8_t system, gyro, accel, mag;
-  system = gyro = accel = mag = 0;
-  bno.getCalibration(&system, &gyro, &accel, &mag);
-
-  Serial.print("\t");
-  if (!system)
-  {
-    Serial.print("! ");
-  }
-
-  Serial.print("Sys:");
-  Serial.print(system, DEC);
-  Serial.print(" G:");
-  Serial.print(gyro, DEC);
-  Serial.print(" A:");
-  Serial.print(accel, DEC);
-  Serial.print(" M:");
-  Serial.print(mag, DEC);
-}
-
 void connectToWifi() {
   WiFi.begin(ssid, password);
-  Serial.println("Connecting to WiFi...");
+  Serial.println("Start connecting.");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println();
-  Serial.println("Connected to WiFi");
+  Serial.println("Connected to Wifi");
 }
 
 void connectToServer() {
@@ -118,26 +49,28 @@ void sendDirection(String direction) {
   }
 }
 
-void checkPos(sensors_event_t event) {
+void checkAndSendDirection(bool triggered, const char* direction) {
+  if (triggered) {
+    Serial.println(direction);
+    //sendDirection(direction);
+    in_default = false;
+  }
+}
+
+void process_event(sensors_event_t event) {
   int z = event.orientation.z;
-
-  if (z < 15 && z > -15) {
-    inPos = false;
-  }
-
-  if (inPos) {
-    return;
-  }
+  int y = event.orientation.y;
   
-  if (z >= 30) {
-    Serial.println("LEFT");
-    sendDirection("LEFT");
-    inPos = true;
-  } else if (z <= -30) {
-    Serial.println("RIGHT");
-    sendDirection("RIGHT");
-    inPos = true;
-  }
+  if (z < DEFAULT_ANGLE && z > -DEFAULT_ANGLE &&
+        y < DEFAULT_ANGLE && y > -DEFAULT_ANGLE)
+        in_default = true;
+
+  if (!in_default) return;
+
+  checkAndSendDirection(z >= TRIGGER_ANGLE, "LEFT");
+  checkAndSendDirection(z <= -TRIGGER_ANGLE, "RIGHT");
+  checkAndSendDirection(y >= TRIGGER_ANGLE, "UP");
+  checkAndSendDirection(y <= -TRIGGER_ANGLE, "DOWN");
 }
 
 void setup(void) {
@@ -145,7 +78,7 @@ void setup(void) {
   while (!Serial) delay(10);
 
   connectToWifi();
-  connectToServer();
+  //connectToServer();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
@@ -156,26 +89,22 @@ void setup(void) {
   }
 
   delay(1000);
-
-  displaySensorDetails();
-  displaySensorStatus();
-
   bno.setExtCrystalUse(true);
 }
 
 void loop(void) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("Reconnecting to WiFi...");
-    connectToWifi();
-  }
-  if (!client.connected()) {
-    connectToServer();
-  }
-
   sensors_event_t event;
   bno.getEvent(&event);
+  process_event(event);
+//
+//  Serial.print("X: ");
+//  Serial.print(event.orientation.x, 4);
+//  Serial.print("\tY: ");
+//  Serial.print(event.orientation.y, 4);
+//  Serial.print("\tZ: ");
+//  Serial.print(event.orientation.z, 4);
+//  Serial.println();
 
-  checkPos(event);
 
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }
