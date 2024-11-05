@@ -1,20 +1,28 @@
-import _asyncio as asyncio
+import asyncio
 import matrix
 import server
+import wifi_conn
+import gc
 
 async def main():
+    gc.enable()
 
-    server_task = asyncio.create_task(server.start_server(matrix.update_direction))
+    wifi_conn = WiFiConnection()
+    if not wifi_conn.connect():
+        return
+
+    server_task = asyncio.create_task(
+        server.Server(matrix.update_direction)
+            .run()
+    )
     matrix_task = asyncio.create_task(matrix.matrix_scroller())
 
-    try:
-        await asyncio.gather(server_task, matrix_task)
-    except KeyboardInterrupt:
-        server.shutdown_server(server_socket)
+    await asyncio.gather(server_task, matrix_task)
 
-#asyncio.run(main())
-loop = asyncio.get_event_loop()
-try:
-    loop.run_until_complete(main())
-finally:
-    loop.close()
+    print("Before collect:", gc.mem_free())
+    gc.collect()
+    time.sleep(2)
+    print("After collect:", gc.mem_free())
+
+
+asyncio.run(main())

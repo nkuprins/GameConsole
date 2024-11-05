@@ -3,9 +3,6 @@ import displayio
 import rgbmatrix
 import adafruit_display_text.label
 import terminalio
-import framebufferio
-
-displayio.release_displays()
 
 # Setup the RGB matrix
 matrix = rgbmatrix.RGBMatrix(
@@ -23,9 +20,10 @@ line1.y = 10
 
 g = displayio.Group()
 g.append(line1)
-display.root_group = g
+display.show(g)
 
 def update_direction(direction):
+    print(direction)
     line1.text = f"Direction: {direction}"
     display.refresh()
 

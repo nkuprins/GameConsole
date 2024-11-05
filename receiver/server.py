@@ -1,63 +1,59 @@
-import wifi
 import socketpool
-import _asyncio
+import asyncio
+import wifi
 
-SSID = "NDL_24G"
-PASSWORD = "RT-AC66U"
+class Server:
 
-def connect_to_wifi():
-    wifi.radio.connect(SSID, PASSWORD)
-    print("Connected to", SSID, "IP:", wifi.radio.ipv4_address)
+    def __init__(self, notify_function):
+        self._server_socket = self._initialize_server()
+        self._notify_function = notify_function
 
-def handle_request(conn):
-    buffer = bytearray(1024)
-    bytes_received = conn.recv_into(buffer)
-    if bytes_received == 0:
-        print("No bytes received")
-        return
-    request = buffer[:bytes_received].decode('utf-8')
-    print("Request:", request)
+    def _initialize_server(self):
+        pool = socketpool.SocketPool(wifi.radio)
+        socket = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
+        socket.bind(("0.0.0.0", 80))
+        socket.listen(1)
+        print("Server started on ", wifi.radio.ipv4_address)
+        return socket
 
-    direction = extract_direction(request)
-    if direction:
-        self.notify_function(direction)
+    def _close_client(self, client_socket):
+        if client_socket:
+            print("Shutting down the client...")
+            client_socket.close()
 
-def extract_direction(self, request):
-        if "direction=" in request:
-            direction_index = request.find("direction=") + len("direction=")
-            direction = request[direction_index:].split(' ')[0].split('&')[0]
-            print(f"Direction received: {direction}")
-            return direction
-        return None
+    def _close_server(self):
+        print("Shutting down server...")
+        self._server_socket.close()
 
-async def process_requests(server_socket, notify_function):
-    while True:
-        try:
-            conn, addr = server_socket.accept()
-            print("Connection from", addr)
-            handle_request(conn)
-        except OSError as e:
-            print("Error in process_requests: ", e)
-        finally:
-            if conn:
-                print("Shutting down the client...") # for DEBUG purposes
-                conn.close()
+    async def _handle_client(self, client_socket):
+        buffer = bytearray(5)
+        while True:
+            try:
+                received = client_socket.recv_into(buffer, 5)
+                if received == 0:
+                    print("Client disconnected")
+                    break
+
+                data = buffer[:received].decode()
+                self._notify_function(data)
+            except OSError as e:
+                print("Socket error ", e)
+                break
             await asyncio.sleep(0.0)
 
-def init_server():
-    connect_to_wifi()
-    pool = socketpool.SocketPool(wifi.radio)
-    server_socket = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
-    server_socket.bind(("0.0.0.0", 80))
-    server_socket.listen(1)
-    server_socket.setblocking(False)
-    print("Server started on:", wifi.radio.ipv4_address)
-    return server_socket
+    async def run(self):
+        if self._server_socket is None:
+            return
 
-def shutdown_server(server_socket):
-    print("Shutting down server...")
-    server_socket.close()
-
-async def start_server(notify_function):
-    server_socket = init_server()
-    await process_requests(server_socket, notify_function)
+        client_socket = None
+        try:
+            client_socket, addr = self._server_socket.accept()
+            print("Connection from ", addr)
+            await handle_client(client_socket)
+        except OSError as e:
+            print("Socket error ", e)
+        finally:
+            self._close_client(client_socket)
+            self._close_server()
+            wifi.radio.enabled = False
+            time.sleep(1)
