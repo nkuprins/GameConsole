@@ -52,7 +52,7 @@ void sendDirection(String direction) {
 void checkAndSendDirection(bool triggered, const char* direction) {
   if (triggered) {
     Serial.println(direction);
-    //sendDirection(direction);
+    sendDirection(direction);
     in_default = false;
   }
 }
@@ -78,7 +78,7 @@ void setup(void) {
   while (!Serial) delay(10);
 
   connectToWifi();
-  //connectToServer();
+  connectToServer();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");

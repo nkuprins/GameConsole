@@ -3,17 +3,17 @@ import matrix
 import server
 import wifi_conn
 import gc
+import time
 
 async def main():
     gc.enable()
 
-    wifi_conn = WiFiConnection()
+    wifi_conn = WiFiConnection
     if not wifi_conn.connect():
         return
 
     server_task = asyncio.create_task(
-        server.Server(matrix.update_direction)
-            .run()
+        server.Server(matrix.update_direction).run()
     )
     matrix_task = asyncio.create_task(matrix.matrix_scroller())
 

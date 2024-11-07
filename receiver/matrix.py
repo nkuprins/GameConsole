@@ -3,6 +3,8 @@ import displayio
 import rgbmatrix
 import adafruit_display_text.label
 import terminalio
+import framebufferio
+import asyncio
 
 # Setup the RGB matrix
 matrix = rgbmatrix.RGBMatrix(

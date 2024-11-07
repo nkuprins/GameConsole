@@ -1,4 +1,5 @@
 import wifi
+import time
 
 class WiFiConnection:
 
@@ -6,8 +7,8 @@ class WiFiConnection:
         self._ssid = "NDL_24G"
         self._password = "RT-AC66U"
 
-    def connect(self):   
-    	self._reset()
+    def connect(self):
+        self._reset()
 
         try:
             wifi.radio.connect(self.ssid, self.password, timeout=5)
