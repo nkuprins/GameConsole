@@ -14,7 +14,10 @@ class Server:
         socket = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
         socket.bind(("0.0.0.0", 80))
         socket.listen(1)
+        socket.setblocking(False)
         print("Server started on ", wifi.radio.ipv4_address)
+        if wifi.radio.ipv4_address is None:
+            return None
         return socket
 
     def _close_client(self, client_socket):
@@ -38,18 +41,27 @@ class Server:
                 data = buffer[:received].decode()
                 self._notify_function(data)
             except OSError as e:
-                print("Socket error ", e)
-                break
-            await asyncio.sleep(0.0)
+                if e.args[0] == errno.EAGAIN:
+                    await asyncio.sleep(0.1)
+
+    async def _accept_connection(self):
+        while True:
+            try:
+                client_socket, addr = self._server_socket.accept()
+                print("Connection from ", addr)
+                return client_socket
+            except OSError as e:
+                if e.args[0] == errno.EAGAIN:
+                    await asyncio.sleep(0.1)
 
     async def run(self):
         if self._server_socket is None:
             return
 
         client_socket = None
+
         try:
-            client_socket, addr = self._server_socket.accept()
-            print("Connection from ", addr)
+            client_socket = await self._accept_connection()
             await self._handle_client(client_socket)
         except OSError as e:
             print("Socket error ", e)

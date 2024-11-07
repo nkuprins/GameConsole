@@ -6,18 +6,20 @@ import gc
 import time
 
 async def main():
+    return
     gc.enable()
 
-    matrix.start()
+    m = matrix.Matrix()
+    await asyncio.sleep(2)
     w = wifi_conn.WiFiConnection()
     if not w.connect():
         return
 
 
     server_task = asyncio.create_task(
-        server.Server(matrix.update_direction).run()
+        server.Server(m.update_direction).run()
     )
-    matrix_task = asyncio.create_task(matrix.matrix_scroller())
+    matrix_task = asyncio.create_task(m.matrix_scroller())
 
     await asyncio.gather(server_task, matrix_task)
     print("Before collect:", gc.mem_free())
