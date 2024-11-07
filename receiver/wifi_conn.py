@@ -11,11 +11,11 @@ class WiFiConnection:
         self._reset()
 
         try:
-            wifi.radio.connect(self.ssid, self.password, timeout=5)
-            print("Connected to", self.ssid, "IP:", wifi.radio.ipv4_address)
+            wifi.radio.connect(self._ssid, self._password, timeout=7)
+            print("Connected to", self._ssid, "IP:", wifi.radio.ipv4_address)
             return True
         except ConnectionError as e:
-            print("Failed to connect:", e)
+            print("Failed to connect to wifi:", e)
             return False
         except Exception as e:
             print("An unexpected error occurred:", e)

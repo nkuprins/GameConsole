@@ -50,11 +50,11 @@ class Server:
         try:
             client_socket, addr = self._server_socket.accept()
             print("Connection from ", addr)
-            await handle_client(client_socket)
+            await self._handle_client(client_socket)
         except OSError as e:
             print("Socket error ", e)
         finally:
             self._close_client(client_socket)
             self._close_server()
             wifi.radio.enabled = False
-            time.sleep(1)
+            time.sleep(2)
