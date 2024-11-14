@@ -5,9 +5,9 @@ import time
 
 class Server:
 
-    def __init__(self, notify_function):
+    def __init__(self, callback):
         self._server_socket = self._initialize_server()
-        self._notify_function = notify_function
+        self._callback = callback
 
     def _initialize_server(self):
         pool = socketpool.SocketPool(wifi.radio)
@@ -39,7 +39,7 @@ class Server:
                     break
 
                 data = buffer[:received].decode()
-                self._notify_function(data)
+                self._callback(data)
             except OSError as e:
                 if e.args[0] == errno.EAGAIN:
                     await asyncio.sleep(0.1)
