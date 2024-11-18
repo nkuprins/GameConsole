@@ -6,7 +6,7 @@ class World:
 
     def __init__(self):
         self._snake = Snake(2, int(HEIGHT / 2), self)
-        self._food = Food(4, int(HEIGHT / 2), self)
+        self._food = Food(8, int(HEIGHT / 2), self)
 
         self._running = True
         self._score = 0

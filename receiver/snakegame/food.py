@@ -24,8 +24,8 @@ class Food:
         return random.randint(BORDER_SIZE + 1 + SCALE, BORDER_SIZE + 1 + SCALE)
 
     def move(self):
-        new_x = self._random_int()
-        new_y = self._random_int()
+        new_x = self._x + 4 #self._random_int()
+        new_y = self._y#self._random_int()
 
         while self._world.get_snake().is_collided_with_snake(new_x, new_y):
             new_x = self._random_int()

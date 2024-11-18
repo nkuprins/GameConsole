@@ -39,12 +39,12 @@ def string_to_direction(str):
 
 def to_coord(direction):
     if direction == Direction.LEFT:
-        return (-1, 0)
+        return (-1 - SCALE, 0)
     elif direction == Direction.RIGHT:
-        return (1, 0)
+        return (1 + SCALE, 0)
     elif direction == Direction.UP:
-        return (0, -1)
+        return (0, -1 - SCALE)
     elif direction == Direction.DOWN:
-        return (0, 1)
+        return (0, 1 + SCALE)
 
     return None

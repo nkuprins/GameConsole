@@ -8,7 +8,7 @@ class Snake:
     # Note, at the start of the game, if the world scale is set to 0,
     # this is the only point of the snake
     def __init__(self, x, y, world):
-        self._direction_coord = to_coord(Direction.RIGHT)
+        self._direction = Direction.RIGHT
         self._x = x
         self._y = y
         self._world = world
@@ -27,11 +27,20 @@ class Snake:
         return self._body
 
     def set_direction(self, new_direction):
-        self._direction = to_coord(new_direction)
+        if new_direction is None:
+            return
+
+        if new_direction == Direction.RIGHT and self._direction == Direction.LEFT or \
+            new_direction == Direction.LEFT and self._direction == Direction.RIGHT or \
+            new_direction == Direction.UP and self._direction == Direction.DOWN or \
+            new_direction == Direction.DOWN and self._direction == Direction.UP:
+                return
+
+        self._direction = new_direction
 
     def move(self):
-        new_x = self._x + self._direction_coord[0]
-        new_y = self._y + self._direction_coord[1]
+        new_x = self._x + to_coord(self._direction)[0]
+        new_y = self._y + to_coord(self._direction)[1]
 
         if self._is_collided_with_body(new_x, new_y) or self._is_collided_with_border(new_x, new_y):
             self._world.end_game()
@@ -49,7 +58,7 @@ class Snake:
     def _update_body(self):
         # All elements from len(body) - 1...1 move to the place of the next one.
         for i in range(len(self._body) - 1, 0, -1):
-            self.body[i] = (self._body[i - 1][0], self._body[i - 1][1]);
+            self._body[i] = (self._body[i - 1][0], self._body[i - 1][1]);
 
         # The first body element after snake's head is at index 0. It moves to old snake's head position.
         if (len(self._body) != 0):

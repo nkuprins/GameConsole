@@ -28,6 +28,6 @@ class Game:
             else:
                 self._view.draw_game(old_head_pos, old_food_pos)
 
-            await asyncio.sleep(2.0)
+            await asyncio.sleep(0.7)
 
     	
