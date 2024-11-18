@@ -44,14 +44,14 @@ class Matrix:
     def draw_pixel(self, x, y, color):
         self._bitmap[x, y] = color
 
-    def draw_with_scale(self, oldpos = None, oldcolor = None, new_pos, new_color):
+    def draw_with_scale(self, old_pos = None, old_color = None, new_pos, new_color):
         def draw_segment(pos, color):
             for x in range(pos[0], pos[0] + SCALE + 1):
                 for y in range(pos[1], pos[1] + SCALE + 1):
                     self._bitmap[x, y] = color
 
-        if oldpos is not None and oldcolor is not None:
-            draw_segment(oldpos, oldcolor)
+        if old_pos is not None and old_color is not None:
+            draw_segment(old_pos, old_color)
 
         draw_segment(new_pos, new_color)
 
