@@ -6,7 +6,7 @@ COLORS_COUNT = 4
 WIDTH = 64
 HEIGHT = 32
 
-BORDER_SIZE = 2
+BORDER_SIZE = 1
 SCALE = 1
 
 class Color:
@@ -26,15 +26,25 @@ class Direction:
     DOWN = "DOWN"
 
 def string_to_direction(str):
-    match str:
-        case "LEFT": return Direction.LEFT
-        case "RIGHT": return Direction.RIGHT
-        case "UP": return Direction.UP
-        case "DOWN": return Direction.DOWN
+    if str == "LEFT":
+        return Direction.LEFT
+    elif str == "RIGHT":
+        return Direction.RIGHT
+    elif str == "UP":
+        return Direction.UP
+    elif str == "DOWN":
+        return Direction.DOWN
+
+    return None
 
 def to_coord(direction):
-    match direction:
-        case Direction.LEFT: return (-1, 0)
-        case Direction.RIGHT: return (1, 0)
-        case Direction.UP: return (0, -1)
-        case Direction.DOWN: return (0, 1)
+    if direction == Direction.LEFT:
+        return (-1, 0)
+    elif direction == Direction.RIGHT:
+        return (1, 0)
+    elif direction == Direction.UP:
+        return (0, -1)
+    elif direction == Direction.DOWN:
+        return (0, 1)
+
+    return None

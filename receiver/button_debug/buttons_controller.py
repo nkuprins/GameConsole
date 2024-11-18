@@ -1,6 +1,7 @@
 import board
+import asyncio
 from utility import Direction
-from button import Button
+from button_debug.button import Button
 
 # ONLY FOR DEBUGGING
 async def run(buttons, callback):

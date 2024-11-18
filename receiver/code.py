@@ -1,13 +1,13 @@
 import asyncio
-from matrix import Matrix
-import server
-import wifi_conn
+from gameconsole.matrix import Matrix
+import network.server as server
+import network.wifi_conn as wifi_conn
 import gc
 import time
-import buttons_controller as bc
+import button_debug.buttons_controller as bc
 import board
-import state
-from console import Console
+import gameconsole.state as state
+from gameconsole.console import Console
 
 # Circuit python has a very bad garbage collector
 # We call it manually to avoid memory leaks of unclosed socket
@@ -34,7 +34,7 @@ async def main1():
 
 async def main2():
 
-    mat = matrix.Matrix()
+    mat = Matrix()
     await asyncio.sleep(1)
 
     console_task = asyncio.create_task(Console(mat).run())
@@ -42,6 +42,6 @@ async def main2():
         bc.run(bc.create_buttons(), state.update_state)
     )
 
-    await asyncio.gather(controller_task, matrix_task)
+    await asyncio.gather(controller_task, console_task)
 
 asyncio.run(main2())

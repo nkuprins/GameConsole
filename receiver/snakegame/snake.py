@@ -1,11 +1,11 @@
 
-from utility import Direction, BORDER_SIZE, SCALE, to_coord
+from utility import Direction, BORDER_SIZE, WIDTH, HEIGHT, SCALE, to_coord
 from snakegame.food import Food
 
 class Snake:
-    
+
     # (x, y) is a point that should be at the top-left corner of a snake
-    # Note, at the start of the game, if the world scale is set to 0, 
+    # Note, at the start of the game, if the world scale is set to 0,
     # this is the only point of the snake
     def __init__(self, x, y, world):
         self._direction_coord = to_coord(Direction.RIGHT)
@@ -34,7 +34,8 @@ class Snake:
         new_y = self._y + self._direction_coord[1]
 
         if self._is_collided_with_body(new_x, new_y) or self._is_collided_with_border(new_x, new_y):
-            self._world.end_game();
+            self._world.end_game()
+            return
 
         if self._is_collided_with_food(new_x, new_y):
             self._body.append((0,0))
@@ -48,15 +49,15 @@ class Snake:
     def _update_body(self):
         # All elements from len(body) - 1...1 move to the place of the next one.
         for i in range(len(self._body) - 1, 0, -1):
-            self.body[i] = (body[i-1][0], body[i-1][1]);
+            self.body[i] = (self._body[i - 1][0], self._body[i - 1][1]);
 
         # The first body element after snake's head is at index 0. It moves to old snake's head position.
-        if (len(body) != 0):
-            body[0] = (self._x, self._y)
+        if (len(self._body) != 0):
+            self._body[0] = (self._x, self._y)
 
     def _is_collided_with_border(self, x, y):
         return x <= BORDER_SIZE or y <= BORDER_SIZE or \
-            x >= BORDER_SIZE or y >= BORDER_SIZE
+            x >= WIDTH - BORDER_SIZE or y >= HEIGHT - BORDER_SIZE
 
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:
@@ -71,5 +72,11 @@ class Snake:
         food = self._world.get_food()
         food_x_end = food.get_x() + SCALE
         food_y_end = food.get_y() + SCALE
-        return (x >= food.get_x() and x <= food_x_end) and \
-                (y >= food.get_y() and y <= food_y_end)
+
+        for i in range(x, x + 1 + SCALE):
+            for j in range(y, y + 1 + SCALE):
+                if (i >= food.get_x() and i <= food_x_end) and \
+                    (j >= food.get_y() and j <= food_y_end):
+                    return True
+
+        return False

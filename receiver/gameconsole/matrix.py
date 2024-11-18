@@ -6,7 +6,7 @@ import asyncio
 from utility import Color, COLORS_COUNT, WIDTH, HEIGHT, SCALE, BORDER_SIZE
 
 class Matrix:
-    
+
     def __init__(self):
 
         self._display = self._setup_display()
@@ -44,7 +44,7 @@ class Matrix:
     def draw_pixel(self, x, y, color):
         self._bitmap[x, y] = color
 
-    def draw_with_scale(self, old_pos = None, old_color = None, new_pos, new_color):
+    def draw_with_scale(self, new_pos, new_color, old_pos = None, old_color = None):
         def draw_segment(pos, color):
             for x in range(pos[0], pos[0] + SCALE + 1):
                 for y in range(pos[1], pos[1] + SCALE + 1):
@@ -55,13 +55,18 @@ class Matrix:
 
         draw_segment(new_pos, new_color)
 
+    def draw_background(self, color):
+        for x in range(0, WIDTH):
+            for y in range(0, HEIGHT):
+                self._bitmap[x, y] = color
+
     def draw_horizontal_line(self, y, color):
         for i in range(WIDTH):
             for j in range(BORDER_SIZE):
-                self._matrix.draw_pixel(i, y + j, color)
+                self.draw_pixel(i, y + j, color)
 
     def draw_vertical_line(self, x, color):
         for i in range(HEIGHT):
             for j in range(BORDER_SIZE):
-                self._matrix.draw_pixel(x + j, i, color)
+                self.draw_pixel(x + j, i, color)
 
