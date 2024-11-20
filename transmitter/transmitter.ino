@@ -4,10 +4,13 @@
 #include <utility/imumaths.h>
 #include <ESP8266WiFi.h>
 
-/* Set the delay between fresh samples */
-#define BNO055_SAMPLERATE_DELAY_MS (100)
+// Set the delay between fresh samples
+#define BNO055_SAMPLERATE_DELAY_MS 100
 #define TRIGGER_ANGLE 30
 #define DEFAULT_ANGLE 15
+
+// Set the delay between new reconnection attempts
+#define RECONNECTION_DELAY_MS 100
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
@@ -32,21 +35,17 @@ void connectToWifi() {
 }
 
 void connectToServer() {
-  if (!client.connected()) {
-    Serial.println("Connecting to server...");
-    if (client.connect(server, port)) {
-      Serial.println("Connected to server");
-    } else {
-      Serial.println("Failed to connect to server");
-    }
+  Serial.println("Connecting to server...");
+  if (client.connect(server, port)) {
+    Serial.println("Connected to server");
+  } else {
+    Serial.println("Failed to connect to server");
   }
 }
 
 void sendDirection(String direction) {
-  if (client.connected()) {
-    client.print(direction);
-    Serial.println("Sent: " + direction);
-  }
+  client.print(direction);
+  Serial.println("Sent: " + direction);
 }
 
 void checkAndSendDirection(bool triggered, const char* direction) {
@@ -73,6 +72,12 @@ void process_event(sensors_event_t event) {
   checkAndSendDirection(y <= -TRIGGER_ANGLE, "DOWN");
 }
 
+void process_event_new(sensors_event_t event) {
+  int z = event.orientation.z;
+  int y = event.orientation.y; 
+  sendDirection("z:" + String(z) + ",y:" + String(y));
+}
+
 void setup(void) {
   Serial.begin(115200);
   while (!Serial) delay(10);
@@ -93,18 +98,13 @@ void setup(void) {
 }
 
 void loop(void) {
-  sensors_event_t event;
-  bno.getEvent(&event);
-  process_event(event);
-//
-//  Serial.print("X: ");
-//  Serial.print(event.orientation.x, 4);
-//  Serial.print("\tY: ");
-//  Serial.print(event.orientation.y, 4);
-//  Serial.print("\tZ: ");
-//  Serial.print(event.orientation.z, 4);
-//  Serial.println();
-
-
-  delay(BNO055_SAMPLERATE_DELAY_MS);
+  if (!client.connected()) {
+    connectToServer();
+    delay(RECONNECTION_DELAY_MS);
+  } else {
+    sensors_event_t event;
+    bno.getEvent(&event);
+    process_event(event);
+    delay(BNO055_SAMPLERATE_DELAY_MS);
+  }
 }

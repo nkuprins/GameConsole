@@ -13,7 +13,7 @@ class Game:
     async def run(self):
         while self._world.is_running():
             # Set the snake direction
-            self._world.get_snake().set_direction(State.DIRECTION)
+            self._world.get_snake().set_direction(State.direction)
 
             # Save old snake positions
             old_head = self._world.get_snake().get_pos()

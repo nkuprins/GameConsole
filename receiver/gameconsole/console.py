@@ -36,3 +36,4 @@ class Console:
     async def _play_game(self):
         if State.game == GameOption.SNAKE:
             await snakegame.Game(self._matrix).run()
+        elif State.game == GameOption.PONG

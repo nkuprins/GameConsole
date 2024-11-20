@@ -1,5 +1,5 @@
 from snakegame.world import World
-from utility import Color, WIDTH, HEIGHT, BORDER_SIZE, SCALE
+from utility import Color, WIDTH, HEIGHT, SCALE
 
 class View:
 
@@ -30,8 +30,8 @@ class View:
         # Draw snake head
         self._matrix.draw_with_scale(self._world.get_snake().get_pos(), Color.DARK_GREEN, old_head, Color.BLACK)
 
-        # Clean tail
         if old_tail_pos is not None:
+            # Clean tail
             self._matrix.draw_with_scale(old_tail_pos, Color.BLACK)
             # Draw snake body
             self._draw_body()

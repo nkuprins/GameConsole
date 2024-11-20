@@ -1,22 +1,22 @@
-from snakegame.snake import Snake
-from snakegame.food import Food
+from ponggame.platform import Platform
+from ponggame.ball import Ball
 from utility import HEIGHT, SCALE
 
-# State of the snake game
+# State of the pong game
 class World:
 
     def __init__(self):
-        self._snake = Snake(2 + SCALE, int(HEIGHT / 2), self)
-        self._food = Food(10 + SCALE, int(HEIGHT / 2), self)
+        self._platform = Platform(4 + SCALE, int(HEIGHT / 2), self)
+        self._ball = Ball(self._platform.get_x() + 1 + SCALE, int(HEIGHT / 2), self)
 
         self._running = True
         self._score = 0
 
-    def get_snake(self):
-        return self._snake
+    def get_platform(self):
+        return self._platform
 
-    def get_food(self):
-        return self._food
+    def get_ball(self):
+        return self._ball
 
     def is_running(self):
         return self._running

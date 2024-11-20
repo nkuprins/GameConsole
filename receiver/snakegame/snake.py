@@ -38,10 +38,15 @@ class Snake:
             new_direction == Direction.LEFT and self._direction == Direction.RIGHT or \
             new_direction == Direction.UP and self._direction == Direction.DOWN or \
             new_direction == Direction.DOWN and self._direction == Direction.UP:
-                return
+            return
 
         self._direction = new_direction
 
+    # Moves snake by Direction.to_coord(self.direction)
+    # If new snake position is collided with a food, 
+    # then increase snake size and score and spawn new food
+    # If new snake position is collided with itself or with a border,
+    # then end the game
     def move(self):
         new_x = self._x + Direction.to_coord(self._direction)[0]
         new_y = self._y + Direction.to_coord(self._direction)[1]
@@ -60,11 +65,11 @@ class Snake:
         self._y = new_y
 
     def _move_body(self):
-        # All elements from len(body)-1...1 move to the place of the next one.
+        # All elements from len(body)-1...1 move to the place of the next one
         for i in range(len(self._body) - 1, 0, -1):
             self._body[i] = (self._body[i - 1][0], self._body[i - 1][1]);
 
-        # The first body element after snake's head is at index 0. It moves to old snake's head position.
+        # The first body element after snake head is at index 0. It moves to old snake head position
         if (len(self._body) != 0):
             self._body[0] = (self._x, self._y)
 

@@ -3,14 +3,14 @@ import displayio
 import rgbmatrix
 import framebufferio
 import asyncio
-from utility import Color, COLORS_COUNT, WIDTH, HEIGHT, SCALE
+from utility import Color, WIDTH, HEIGHT, SCALE
 
 # Class to setup the matrix and draw pixels
 class Matrix:
 
     def __init__(self):
         self._display = self._setup_display()
-        self._bitmap = displayio.Bitmap(self._display.width, self._display.height, COLORS_COUNT)
+        self._bitmap = displayio.Bitmap(self._display.width, self._display.height, Color.COLORS_COUNT)
         self._palette = self._setup_palette()
         self._setup_group()
 
@@ -28,11 +28,14 @@ class Matrix:
         return display
 
     def _setup_palette(self):
-        palette = displayio.Palette(COLORS_COUNT)
+        palette = displayio.Palette(Color.COLORS_COUNT)
         palette[Color.LIGHT_GREEN] = Color.to_hex(LIGHT_GREEN)
         palette[Color.DARK_GREEN]  = Color.to_hex(DARK_GREEN)
         palette[Color.RED]         = Color.to_hex(RED)
         palette[Color.BLACK]       = Color.to_hex(BLACK)
+        palette[Color.WHITE]       = Color.to_hex(WHITE)
+        palette[Color.YELLOW]      = Color.to_hex(YELLOW)
+        palette[Color.BLUE]        = Color.to_hex(BLUE)
         return palette
 
     def _setup_group(self):
@@ -79,7 +82,7 @@ class Matrix:
             for j in range(SCALE):
                 self.draw_pixel(x + j, i, color)
 
-    def _draw_border(self, color):
+    def draw_border(self, color):
         self.draw_horizontal_line(0, color)
         self.draw_horizontal_line(HEIGHT - SCALE - 1, color)
         self.draw_vertical_line(0, color)
