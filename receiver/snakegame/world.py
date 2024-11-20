@@ -2,6 +2,7 @@ from snakegame.snake import Snake
 from snakegame.food import Food
 from utility import HEIGHT
 
+# State of the snake game
 class World:
 
     def __init__(self):

@@ -1,6 +1,7 @@
 import digitalio
 
 # ONLY FOR DEBUGGING
+# Class to represent a button
 class Button:
 
     def __init__(self, pin, direction):

@@ -1,12 +1,16 @@
 
-# Now, since circuit python is a very poor version python,
-# we have to do some small workarounds, as there is no enums, staticmethods etc.
+# For the network
+SSID = "NDL_24G"
+WIFI_PSWD = "RT-AC66U"
 
+# For the matrix
 COLORS_COUNT = 4
 WIDTH = 64
 HEIGHT = 32
-
-BORDER_SIZE = 1
+# If scale is 0, then the world has a default size, which is 1 pixel for main objects
+# For example, snake body part and head will be 1x1
+# If scale is n and n > 0, then the world has a scaled size, which is 1+n pixel for main objects
+# For example, if n=1 then snake body part and head will be 2x2 
 SCALE = 1
 
 class Color:
@@ -14,10 +18,13 @@ class Color:
     DARK_GREEN = 1
     RED = 2
     BLACK = 3
-    LIGHT_GREEN_HEX = 0x3ac766
-    DARK_GREEN_HEX = 0x3d6639
-    RED_HEX = 0x663b39
-    BLACK_HEX = 0x000000
+
+    def to_hex(color):
+        if color == Color.LIGHT_GREEN: return 0x3ac766
+        elif color == Color.DARK_GREEN: return 0x3d6639
+        elif color == Color.RED: return 0x663b39
+        elif color == Color.BLACK: return 0x000000
+        return None
 
 class Direction:
     LEFT = "LEFT"
@@ -25,26 +32,23 @@ class Direction:
     UP = "UP"
     DOWN = "DOWN"
 
-def string_to_direction(str):
-    if str == "LEFT":
-        return Direction.LEFT
-    elif str == "RIGHT":
-        return Direction.RIGHT
-    elif str == "UP":
-        return Direction.UP
-    elif str == "DOWN":
-        return Direction.DOWN
+    def from_string(str):
+        if str == "LEFT": return Direction.LEFT
+        elif str == "RIGHT": return Direction.RIGHT
+        elif str == "UP": return Direction.UP
+        elif str == "DOWN": return Direction.DOWN
+        return None
 
-    return None
+    # Takes direction and returns the movement point
+    # with scaling factor included
+    def to_coord(direction):
+        if direction == Direction.LEFT:
+            return (-1 - SCALE, 0)
+        elif direction == Direction.RIGHT:
+            return (1 + SCALE, 0)
+        elif direction == Direction.UP:
+            return (0, -1 - SCALE)
+        elif direction == Direction.DOWN:
+            return (0, 1 + SCALE)
+        return None
 
-def to_coord(direction):
-    if direction == Direction.LEFT:
-        return (-1 - SCALE, 0)
-    elif direction == Direction.RIGHT:
-        return (1 + SCALE, 0)
-    elif direction == Direction.UP:
-        return (0, -1 - SCALE)
-    elif direction == Direction.DOWN:
-        return (0, 1 + SCALE)
-
-    return None

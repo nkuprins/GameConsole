@@ -1,17 +1,16 @@
-from utility import Direction
-
 class GameOption:
     SNAKE = 0
     CUBES_FALL = 1
+    PONG = 2
 
 class Phase:
     MENU = 0
     GAME = 1
 
 class State:
-    DIRECTION = None
-    PHASE = Phase.MENU
-    GAME = None
+    direction = None
+    game = None
+    phase = Phase.MENU
 
-def update_state(direction):
-    State.DIRECTION = direction
+    def update_direction(direction):
+        State.direction = direction

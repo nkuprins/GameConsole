@@ -4,6 +4,7 @@ from utility import Direction
 from button_debug.button import Button
 
 # ONLY FOR DEBUGGING
+# Listens for button presses and calls callback function on them
 async def run(buttons, callback):
     while True:
         for button in buttons:

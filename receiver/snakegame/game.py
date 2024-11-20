@@ -3,6 +3,7 @@ from snakegame.view import View
 from gameconsole.state import State
 import asyncio
 
+# Class to run the snake game
 class Game:
 
     def __init__(self, matrix):
@@ -11,23 +12,20 @@ class Game:
 
     async def run(self):
         while self._world.is_running():
+            # Set the snake direction
             self._world.get_snake().set_direction(State.DIRECTION)
 
-            old_head_pos = self._world.get_snake().get_pos()
-            old_food_pos = self._world.get_food().get_pos()
-            body = self._world.get_snake().get_body()
+            # Save old snake positions
+            old_head = self._world.get_snake().get_pos()
+            old_food = self._world.get_food().get_pos()
+            old_tail = self._world.get_snake().try_get_tail()
 
-            old_tail_pos = None
-            if len(body) > 0:
-                old_tail_pos = body[-1]
-
+            # Move the snake
             self._world.get_snake().move()
-
-            if old_tail_pos is not None:
-                self._view.draw_game(old_head_pos, old_food_pos, old_tail_pos)
-            else:
-                self._view.draw_game(old_head_pos, old_food_pos)
-
+            # Draw new game data
+            self._view.draw_game(old_head_pos, old_food_pos, old_tail_pos)
+            
+            # Signal the other task to run and wait for some time
             await asyncio.sleep(0.7)
 
     	
