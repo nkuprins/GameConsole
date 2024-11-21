@@ -1,27 +1,16 @@
-from utility import Direction, WIDTH, SCALE
+from game.gameobject import GameObject
+from utility import Direction, HEIGHT, SCALE
 
 # Class that represents a platform
-class Platform:
+class Platform(GameObject):
 
-    # (x, y) is the anchor point
     def __init__(self, x, y, world):
-        self._x = x
-        self._y = y
-        self._world = world
-
-    def get_x(self):
-        return self._x
-
-    def get_y(self):
-        return self._y
-
-    def get_pos(self):
-        return (self._x, self._y)
+        super().__init__(x, y, world)
 
     def move(self, direction):
         if direction is None or \
-            direction == Direction.UP or direction == Direction.DOWN: 
+            direction == Direction.LEFT or direction == Direction.RIGHT:
             return
-            
-        new_x = self._x + Direction.to_coord(direction)[0]
-        self._x = min(max(new_x, SCALE), WIDTH - 1 - SCALE)
+
+        new_y = self._y + Direction.to_coord(direction)[1]
+        self._y = min(max(new_y, SCALE + 1), HEIGHT - (SCALE + 1) * 2)

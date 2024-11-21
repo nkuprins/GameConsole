@@ -7,7 +7,7 @@ class World:
 
     def __init__(self):
         self._platform = Platform(4 + SCALE, int(HEIGHT / 2), self)
-        self._ball = Ball(self._platform.get_x() + 1 + SCALE, int(HEIGHT / 2), self)
+        self._ball = Ball(self._platform.get_x() + 2 + SCALE, int(HEIGHT / 2), self)
 
         self._running = True
         self._score = 0

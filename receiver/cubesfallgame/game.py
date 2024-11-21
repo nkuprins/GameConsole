@@ -1,6 +1,6 @@
 from cubesfallgame.world import World
 from cubesfallgame.view import View
-from gameconsole.state import State
+from consoleparts.state import State
 from utility import CUBES_SENSITIVITY
 import asyncio
 
@@ -16,7 +16,7 @@ class Game:
             orientation = State.orientation
             z = orientation[0]
             y = orientation[1]
-            if z == 0 && y == 0 || abs(z) < CUBES_SENSITIVITY && abs(y) < CUBES_SENSITIVITY:
+            if z == 0 and y == 0 or abs(z) < CUBES_SENSITIVITY and abs(y) < CUBES_SENSITIVITY:
                 await asyncio.sleep(0.3)
                 continue
 
@@ -24,9 +24,9 @@ class Game:
             is_diagonal_move = False
             for cube in self._world.get_cubes():
                 new_pos = cube.get_move_coord(orientation)
-                if new_pos is None: 
+                if new_pos is None:
                     break
-                elif if self._view.has_cube(new_pos): 
+                elif self._view.has_cube(new_pos):
                     continue
                 old_pos = cube.get_pos()
                 cube.move(new_pos)

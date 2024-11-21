@@ -29,13 +29,13 @@ class Matrix:
 
     def _setup_palette(self):
         palette = displayio.Palette(Color.COLORS_COUNT)
-        palette[Color.LIGHT_GREEN] = Color.to_hex(LIGHT_GREEN)
-        palette[Color.DARK_GREEN]  = Color.to_hex(DARK_GREEN)
-        palette[Color.RED]         = Color.to_hex(RED)
-        palette[Color.BLACK]       = Color.to_hex(BLACK)
-        palette[Color.WHITE]       = Color.to_hex(WHITE)
-        palette[Color.YELLOW]      = Color.to_hex(YELLOW)
-        palette[Color.BLUE]        = Color.to_hex(BLUE)
+        palette[Color.BLACK]       = Color.to_hex(Color.BLACK)
+        palette[Color.LIGHT_GREEN] = Color.to_hex(Color.LIGHT_GREEN)
+        palette[Color.DARK_GREEN]  = Color.to_hex(Color.DARK_GREEN)
+        palette[Color.RED]         = Color.to_hex(Color.RED)
+        palette[Color.WHITE]       = Color.to_hex(Color.WHITE)
+        palette[Color.YELLOW]      = Color.to_hex(Color.YELLOW)
+        palette[Color.BLUE]        = Color.to_hex(Color.BLUE)
         return palette
 
     def _setup_group(self):
@@ -44,11 +44,11 @@ class Matrix:
         group.append(tile_grid)
         self._display.root_group = group
 
-    # Draws a pixel at (x,y) point with color 
+    # Draws a pixel at (x,y) point with color
     def draw_pixel(self, x, y, color):
         self._bitmap[x, y] = color
 
-    # Draws a pixel at pos with color 
+    # Draws a pixel at pos with color
     # If clean_pos and clean_color are not none,
     # then also draws a pixel for cleaning at clean_pos with clean_color
     def draw_pixel_(self, pos, color, clean_pos = None, clean_color = None):
@@ -71,6 +71,23 @@ class Matrix:
 
         draw_segment(pos, color)
 
+    # TODO CLEAN THE CODE HERE A BIT
+    def draw_with_size(self, pos, color, size_x, size_y, clean_pos = None, clean_color = None):
+        def draw(size, is_x):
+            for i in range(size):
+                move_x = pos[0] if i == 0 else pos[0] + i + SCALE
+                move_y = pos[1] if i == 0 else pos[1] + i + SCALE
+                new_pos = (move_x, pos[1]) if is_x else (pos[0], move_y)
+                if clean_pos is not None and clean_color is not None:
+                    clean_x = clean_pos[0] if i == 0 else clean_pos[0] + i + SCALE
+                    clean_y = clean_pos[1] if i == 0 else clean_pos[1] + i + SCALE
+                    new_clean_pos = (clean_x, clean_pos[1]) if is_x else (clean_pos[0], clean_y)
+                    self.draw_with_scale(new_pos, color, new_clean_pos, clean_color)
+                else:
+                    self.draw_with_scale(new_pos, color)
+        draw(size_x, True)
+        draw(size_y, False)
+
     # Draws pixels for WIDTH and HEIGHT with color
     def draw_background(self, color):
         for x in range(0, WIDTH):
@@ -80,20 +97,20 @@ class Matrix:
     # Draws a horizontal line at y coordinate with scaling factor
     def draw_horizontal_line(self, y, color):
         for i in range(WIDTH):
-            for j in range(SCALE):
+            for j in range(SCALE+ 1):
                 self.draw_pixel(i, y + j, color)
 
     # Draws a vertical line at x coordinate with scaling factor
     def draw_vertical_line(self, x, color):
         for i in range(HEIGHT):
-            for j in range(SCALE):
+            for j in range(SCALE + 1):
                 self.draw_pixel(x + j, i, color)
 
     def draw_border(self, color):
         self.draw_horizontal_line(0, color)
         self.draw_horizontal_line(HEIGHT - SCALE - 1, color)
         self.draw_vertical_line(0, color)
-        self.draw_vertical_line(WIDTH - BORDER_SIZE - 1, color)
+        self.draw_vertical_line(WIDTH - SCALE - 1, color)
 
     def has_color(self, x, y, color):
         return self._bitmap[x, y] == color

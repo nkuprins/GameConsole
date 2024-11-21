@@ -1,3 +1,4 @@
+import random
 
 # For the network
 SSID = "NDL_24G"
@@ -9,20 +10,20 @@ HEIGHT = 32
 # If scale is 0, then the world has a default size, which is 1 pixel for main objects
 # For example, snake body part and head will be 1x1
 # If scale is n and n > 0, then the world has a scaled size, which is 1+n pixel for main objects
-# For example, if n=1 then snake body part and head will be 2x2 
+# For example, if n=1 then snake body part and head will be 2x2
 SCALE = 1
 
 # For the cubes game
 CUBES_SENSITIVITY = 10
-CUBES_SIZE = 1
+CUBES_SIZE = 5
 
 class Color:
     COLORS_COUNT = 7
 
-    LIGHT_GREEN = 0
-    DARK_GREEN = 1
-    RED = 2
-    BLACK = 3
+    BLACK = 0
+    LIGHT_GREEN = 1
+    DARK_GREEN = 2
+    RED = 3
     WHITE = 4
     YELLOW = 5
     BLUE = 6
@@ -33,9 +34,15 @@ class Color:
         elif color == Color.RED: return 0x663b39
         elif color == Color.BLACK: return 0x000000
         elif color == Color.WHITE: return 0xffffff
-        elif color == Color.WHITE: return 0xfef65b 
-        elif color == Color.BLUE: return 0x4974a5 
+        elif color == Color.YELLOW: return 0xfef65b
+        elif color == Color.BLUE: return 0x4974a5
         return None
+
+
+    def random_color():
+        colors = [Color.BLUE, Color.RED, Color.YELLOW, Color.DARK_GREEN]
+        index = random.randint(0, len(colors) - 1)
+        return colors[index]
 
 class Direction:
     LEFT = "LEFT"

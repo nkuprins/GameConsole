@@ -14,7 +14,9 @@ class CustomWiFi:
         self._scan_networks()
 
         try:
-            wifi.radio.connect(self._ssid, self._password, timeout=5)
+            print(self._ssid)
+            print(self._password)
+            wifi.radio.connect(self._ssid, self._password, timeout=10)
             print("INFO: Connected to", self._ssid, "IP - ", wifi.radio.ipv4_address)
             return True
         except ConnectionError as e:

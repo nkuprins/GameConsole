@@ -1,26 +1,17 @@
-
+from game.gameobject import GameObject
 from utility import Direction, WIDTH, HEIGHT, SCALE
 from snakegame.food import Food
 
 # Class that represents a snake
-class Snake:
+class Snake(GameObject):
 
-    # (x, y) is the anchor point
     def __init__(self, x, y, world):
+        super().__init__(x, y, world)
         self._direction = Direction.RIGHT
-        self._x = x
-        self._y = y
-        self._world = world
         self._body = []
 
-    def get_x(self):
-        return self._x
-
-    def get_y(self):
-        return self._y
-
     def get_head(self):
-        return (self._x, self._y)
+        return self.get_pos()
 
     def try_get_tail(self):
         if len(self._body) > 0:
@@ -43,7 +34,7 @@ class Snake:
         self._direction = new_direction
 
     # Moves snake by Direction.to_coord(self.direction)
-    # If new snake position is collided with a food, 
+    # If new snake position is collided with a food,
     # then increase snake size and score and spawn new food
     # If new snake position is collided with itself or with a border,
     # then end the game
@@ -77,7 +68,7 @@ class Snake:
     def _is_collided_with_border(self, x, y):
         return x <= SCALE or y <= SCALE or \
             x >= (WIDTH - 1 - SCALE) or y >= (HEIGHT - 1 - SCALE)
-    
+
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:
             if (self._is_collided((x, y), body_part)):
@@ -90,17 +81,3 @@ class Snake:
     def _is_collided_with_food(self, x, y):
         food_pos = self._world.get_food().get_pos()
         return self._is_collided((x, y), food_pos)
-
-    # True if pos_a is collided with pos_b
-    def _is_collided(self, pos_a, pos_b):
-        a_start_x = pos_a[0]
-        a_start_y = pos_a[1]
-        a_end_x = pos_a[0] + SCALE
-        a_end_y = pos_a[1] + SCALE
-        b_start_x = pos_b[0]
-        b_start_y = pos_b[1]
-        b_end_x = pos_b[0] + SCALE
-        b_end_y = pos_b[1] + SCALE
-
-        return a_end_x >= b_start_x and a_start_x <= b_end_x and \
-                a_end_y >= b_start_y and a_start_y <= b_end_y

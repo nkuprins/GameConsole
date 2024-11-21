@@ -1,4 +1,4 @@
-from gameconsole.state import State, Phase, GameOption
+from consoleparts.state import State, Phase, GameOption
 import snakegame.game as snakegame
 import ponggame.game as ponggame
 import cubesfallgame.game as cubesfallgame
@@ -10,7 +10,7 @@ class Console:
     def __init__(self, matrix):
         self._matrix = matrix
 
-    # The core of all console functionality 
+    # The core of all console functionality
     async def run(self):
         await self._show_logo()
 
@@ -31,14 +31,14 @@ class Console:
     # TODO
     async def _choose_game(self):
         State.phase = Phase.GAME
-        State.game = GameOption.SNAKE
+        State.game = GameOption.CUBES_FALL
         return
 
     # TODO
     async def _play_game(self):
         if State.game == GameOption.SNAKE:
             await snakegame.Game(self._matrix).run()
-        elif State.game == GameOption.PONG
+        elif State.game == GameOption.PONG:
             await ponggame.Game(self._matrix).run()
-        elif State.game == GameOption.CUBES_FALL
+        elif State.game == GameOption.CUBES_FALL:
             await cubesfallgame.Game(self._matrix).run()

@@ -1,24 +1,13 @@
 import random
+from game.gameobject import GameObject
 from utility import Direction, WIDTH, HEIGHT, SCALE, CUBES_SENSITIVITY
 
 # Class that represents a cube
-class Cube:
+class Cube(GameObject):
 
-    # (x, y) is the anchor point
     def __init__(self, x, y, color, world):
-        self._x = x
-        self._y = y
-        self._world = world
+        super().__init__(x, y, world)
         self._color = color
-
-    def get_x(self):
-        return self._x
-
-    def get_y(self):
-        return self._y
-
-    def get_pos(self):
-        return (self._x, self._y)
 
     def get_color(self):
         return self._color
@@ -43,13 +32,13 @@ class Cube:
         def calculate(coord):
             if coord > CUBES_SENSITIVITY: return 1
             elif coord < -CUBES_SENSITIVITY: return -1
-            else return 0
+            else: return 0
 
         return [calculate(orientation[0]), calculate(orientation[1])]
 
     def _accelerate_coord(orientation):
-        new_coord_x = self._random_accelerate(orientation[0]) ? coord[0] * 2 : coord[0]
-        new_coord_y = self._random_accelerate(orientation[1]) ? coord[1] * 2 : coord[1]
+        new_coord_x = coord[0] * 2 if self._random_accelerate(orientation[0]) else coord[0]
+        new_coord_y = coord[1] * 2 if self._random_accelerate(orientation[1]) else coord[1]
         return [new_coord_x, new_coord_y]
 
     def _random_accelerate(orientation):

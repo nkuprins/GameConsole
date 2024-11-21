@@ -1,13 +1,13 @@
 import asyncio
-from gameconsole.matrix import Matrix
+from consoleparts.matrix import Matrix
 from network.server import Server
-from network.custom_wifi import WiFi
+from network.custom_wifi import CustomWiFi
 import gc
 import time
 import button_debug.buttons_controller as bc
 import board
-from gameconsole.state import State
-from gameconsole.console import Console
+from consoleparts.state import State
+from consoleparts.console import Console
 
 # Main 1 for production
 # We manually call garbage collector to avoid memory leaks of unclosed socket,
@@ -27,14 +27,15 @@ async def main1():
     # Set up the server task to run
     server_task = asyncio.create_task(Server(State.update_direction).run())
     # Set up the console task to run
-    console_task = asyncio.create_task(Console(matrix).run())
+    # console_task = asyncio.create_task(Console(matrix).run())
 
     # Wait for all tasks to complete
-    await asyncio.gather(server_task, matrix_task)
+    #await asyncio.gather(server_task, console_task)
+    await server_task
 
     print("DEBUG: before collect ", gc.mem_free())
     gc.collect()
-    # Wait for sockets to be closed to avoid memory leak 
+    # Wait for sockets to be closed to avoid memory leak
     time.sleep(2)
     print("DEBUG: after collect ", gc.mem_free())
 
@@ -43,7 +44,6 @@ async def main2():
 
     # Set up the matrix and wait
     matrix = Matrix()
-    await asyncio.sleep(1)
 
     # Set up the console task to run
     console_task = asyncio.create_task(Console(matrix).run())
@@ -55,4 +55,4 @@ async def main2():
     # Wait for all tasks to complete
     await asyncio.gather(controller_task, console_task)
 
-asyncio.run(main2())
+asyncio.run(main1())

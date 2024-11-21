@@ -22,4 +22,4 @@ class View:
         self._matrix.draw_pixel_(cube.get_pos(), cube.get_color(), old_pos, Color.BLACK)
 
     def has_cube(self, pos):
-        return !self._matrix.has_color(pos[0], pos[1], Color.BLACK)
+        return not self._matrix.has_color(pos[0], pos[1], Color.BLACK)

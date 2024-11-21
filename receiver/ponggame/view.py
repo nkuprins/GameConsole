@@ -12,9 +12,9 @@ class View:
         # Draw background
         self._matrix.draw_background(Color.BLACK)
         # Draw border
-        self._matrix.draw_border(Color.WHITE)
+        self._matrix.draw_border(Color.BLUE)
         # Draw platform
-        self._matrix.draw_with_scale(self._world.get_platform().get_pos(), Color.WHITE)
+        self._matrix.draw_with_size(self._world.get_platform().get_pos(), Color.WHITE, 0, 3)
         # Draw ball
         self._matrix.draw_with_scale(self._world.get_ball().get_pos(), Color.WHITE)
 
@@ -23,4 +23,4 @@ class View:
         self._matrix.draw_with_scale(self._world.get_ball().get_pos(), Color.WHITE, old_ball, Color.BLACK)
 
         # Draw platform
-        self._matrix.draw_with_scale(self._world.get_platform().get_pos(), Color.WHITE, old_platform, Color.BLACK)
+        self._matrix.draw_with_size(self._world.get_platform().get_pos(), Color.WHITE, 0, 3, old_platform, Color.BLACK)

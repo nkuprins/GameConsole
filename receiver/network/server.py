@@ -55,7 +55,7 @@ class Server:
 
     # Reads from client_socket if can, and calls the callback function
     async def _handle_client(self, client_socket):
-        buffer = bytearray(5)
+        buffer = bytearray(20)
         while True:
             try:
                 received = client_socket.recv_into(buffer, 5)
@@ -64,7 +64,8 @@ class Server:
                     break
 
                 data = buffer[:received].decode()
-                self._callback(data)
+                print(data)
+                # self._callback(data)
             except OSError as e:
                 # No incoming data yet
                 if e.args[0] == errno.EAGAIN:

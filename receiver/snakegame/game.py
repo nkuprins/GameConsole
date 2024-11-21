@@ -1,6 +1,6 @@
 from snakegame.world import World
 from snakegame.view import View
-from gameconsole.state import State
+from consoleparts.state import State
 import asyncio
 
 # Class to run the snake game
@@ -16,16 +16,16 @@ class Game:
             self._world.get_snake().set_direction(State.direction)
 
             # Save old snake positions
-            old_head = self._world.get_snake().get_pos()
+            old_head = self._world.get_snake().get_head()
             old_food = self._world.get_food().get_pos()
             old_tail = self._world.get_snake().try_get_tail()
 
             # Move the snake
             self._world.get_snake().move()
             # Draw new game data
-            self._view.draw_game(old_head_pos, old_food_pos, old_tail_pos)
-            
+            self._view.draw_game(old_head, old_food, old_tail)
+
             # Signal the other task to run and wait for some time
-            await asyncio.sleep(0.7)
+            await asyncio.sleep(0.6)
 
     	

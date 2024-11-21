@@ -1,22 +1,12 @@
+from game.gameobject import GameObject
 import random
 from utility import SCALE, WIDTH
 
-class Food:
+class Food(GameObject):
 
     # (x, y) is the anchor point
     def __init__(self, x, y, world):
-        self._x = x
-        self._y = y
-        self._world = world
-
-    def get_x(self):
-        return self._x
-
-    def get_y(self):
-        return self._y
-
-    def get_pos(self):
-        return (self._x, self._y)
+        super().__init__(x, y, world)
 
     def _random_spawn_coord(self):
         return random.randint(SCALE + 1, WIDTH - 1 - SCALE)

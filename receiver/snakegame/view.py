@@ -14,7 +14,7 @@ class View:
         # Draw border
         self._matrix.draw_border(Color.RED)
         # Draw snake head
-        self._matrix.draw_with_scale(self._world.get_snake().get_pos(), Color.DARK_GREEN)
+        self._matrix.draw_with_scale(self._world.get_snake().get_head(), Color.DARK_GREEN)
         # Draw food
         self._matrix.draw_with_scale(self._world.get_food().get_pos(), Color.RED)
 
@@ -28,10 +28,10 @@ class View:
         self._matrix.draw_with_scale(self._world.get_food().get_pos(), Color.RED, old_food, Color.BLACK)
 
         # Draw snake head
-        self._matrix.draw_with_scale(self._world.get_snake().get_pos(), Color.DARK_GREEN, old_head, Color.BLACK)
+        self._matrix.draw_with_scale(self._world.get_snake().get_head(), Color.DARK_GREEN, old_head, Color.BLACK)
 
-        if old_tail_pos is not None:
+        if old_tail is not None:
             # Clean tail
-            self._matrix.draw_with_scale(old_tail_pos, Color.BLACK)
-            # Draw snake body
-            self._draw_body()
+            self._matrix.draw_with_scale(old_tail, Color.BLACK)
+        # Draw snake body
+        self._draw_body()
