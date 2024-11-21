@@ -48,21 +48,28 @@ class Matrix:
     def draw_pixel(self, x, y, color):
         self._bitmap[x, y] = color
 
-    
-    # Draws a segment at new_pos with new_color
+    # Draws a pixel at pos with color 
+    # If clean_pos and clean_color are not none,
+    # then also draws a pixel for cleaning at clean_pos with clean_color
+    def draw_pixel_(self, pos, color, clean_pos = None, clean_color = None):
+        if clean_pos is not None and clean_color is not None:
+            self.draw_pixel(clean_pos[0], clean_pos[1], clean_color)
+        self.draw_pixel(pos[0], pos[1], color)
+
+    # Draws a segment at pos with color
     # If clean_pos and clean_color are not none,
     # then also draws a segment for cleaning at clean_pos with clean_color
-    def draw_with_scale(self, new_pos, new_color, clean_pos = None, clean_color = None):
+    def draw_with_scale(self, pos, color, clean_pos = None, clean_color = None):
         # Draws pixels with scaling factor included (2x2, 3x3...)
-        def draw_segment(pos, color):
-            for x in range(pos[0], pos[0] + SCALE + 1):
-                for y in range(pos[1], pos[1] + SCALE + 1):
-                    self.draw_pixel(x, y, color)
+        def draw_segment(p, c):
+            for x in range(p[0], p[0] + SCALE + 1):
+                for y in range(p[1], p[1] + SCALE + 1):
+                    self.draw_pixel(x, y, c)
 
         if clean_pos is not None and clean_color is not None:
             draw_segment(clean_pos, clean_color)
 
-        draw_segment(new_pos, new_color)
+        draw_segment(pos, color)
 
     # Draws pixels for WIDTH and HEIGHT with color
     def draw_background(self, color):
@@ -88,3 +95,5 @@ class Matrix:
         self.draw_vertical_line(0, color)
         self.draw_vertical_line(WIDTH - BORDER_SIZE - 1, color)
 
+    def has_color(self, x, y, color):
+        return self._bitmap[x, y] == color

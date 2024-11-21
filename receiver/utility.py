@@ -12,6 +12,10 @@ HEIGHT = 32
 # For example, if n=1 then snake body part and head will be 2x2 
 SCALE = 1
 
+# For the cubes game
+CUBES_SENSITIVITY = 10
+CUBES_SIZE = 1
+
 class Color:
     COLORS_COUNT = 7
 

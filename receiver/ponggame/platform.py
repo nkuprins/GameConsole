@@ -1,4 +1,4 @@
-from utility import Direction, WIDTH, HEIGHT, SCALE
+from utility import Direction, WIDTH, SCALE
 
 # Class that represents a platform
 class Platform:
@@ -22,12 +22,6 @@ class Platform:
         if direction is None or \
             direction == Direction.UP or direction == Direction.DOWN: 
             return
-        new_x = self._x + Direction.to_coord(self._direction)[0]
-
-        if self._is_collided_with_side(new_x):
-            return
-
-        self._x = new_x
-
-    def _is_collided_with_side(self, x):
-        return x >= (self._world.get_width() - 1 - SCALE) or x <= SCALE
+            
+        new_x = self._x + Direction.to_coord(direction)[0]
+        self._x = min(max(new_x, SCALE), WIDTH - 1 - SCALE)

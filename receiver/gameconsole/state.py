@@ -9,6 +9,7 @@ class Phase:
 
 class State:
     direction = None
+    orientation = (0,0)
     game = None
     phase = Phase.MENU
 

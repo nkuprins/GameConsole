@@ -1,5 +1,7 @@
 from gameconsole.state import State, Phase, GameOption
 import snakegame.game as snakegame
+import ponggame.game as ponggame
+import cubesfallgame.game as cubesfallgame
 import asyncio
 
 # Class to represent game console
@@ -37,3 +39,6 @@ class Console:
         if State.game == GameOption.SNAKE:
             await snakegame.Game(self._matrix).run()
         elif State.game == GameOption.PONG
+            await ponggame.Game(self._matrix).run()
+        elif State.game == GameOption.CUBES_FALL
+            await cubesfallgame.Game(self._matrix).run()
