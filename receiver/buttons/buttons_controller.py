@@ -1,6 +1,6 @@
 import board
 import asyncio
-from utility import Direction
+from properties.direction import Direction
 from buttons.button import Button
 
 # ONLY FOR DEBUGGING
