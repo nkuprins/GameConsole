@@ -1,6 +1,7 @@
-from snakegame.world import World
-from snakegame.view import View
-from consoleparts.state import State
+from games.snake_game.world import World
+from games.snake_game.view import View
+from properties.state import State
+from properties.direction import Direction
 import asyncio
 
 # Class to run the snake game
@@ -13,7 +14,8 @@ class Game:
     async def run(self):
         while self._world.is_running():
             # Set the snake direction
-            self._world.get_snake().set_direction(State.direction)
+            direction = Direction.from_orientation(State.orientation)
+            self._world.get_snake().set_direction(direction)
 
             # Save old snake positions
             old_head = self._world.get_snake().get_head()

@@ -1,6 +1,6 @@
 import wifi
 import time
-from utility import SSID, WIFI_PSWD
+from properties.constants import SSID, WIFI_PSWD
 
 # Class to set up wifi connection
 class CustomWiFi:

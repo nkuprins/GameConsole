@@ -58,14 +58,13 @@ class Server:
         buffer = bytearray(20)
         while True:
             try:
-                received = client_socket.recv_into(buffer, 5)
+                received = client_socket.recv_into(buffer, 20)
                 if received == 0:
                     print("Client disconnected")
                     break
 
                 data = buffer[:received].decode()
-                print(data)
-                # self._callback(data)
+                self._callback(data)
             except OSError as e:
                 # No incoming data yet
                 if e.args[0] == errno.EAGAIN:

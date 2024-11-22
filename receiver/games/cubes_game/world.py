@@ -1,12 +1,13 @@
-from cubesfallgame.cube import Cube
+from games.cubes_game.cube import Cube
+from games.parent.world_object import WorldObject
+from properties.constants import WIDTH, HEIGHT, WORLD_SIZE, CUBES_SIZE
+from properties.color import Color
 
-from utility import WIDTH, HEIGHT, SCALE, CUBES_SIZE, Color
-
-# State of the pong game
-class World:
+# State of the cube game
+class World(WorldObject):
 
     def __init__(self):
-        self._running = True
+        super().__init__(Color.BLACK)
         self._cubes = []
         centre_x = int(WIDTH / 2)
         centre_y = int(HEIGHT / 2)
@@ -17,9 +18,3 @@ class World:
 
     def get_cubes(self):
         return self._cubes
-
-    def is_running(self):
-        return self._running
-
-    def end_game(self):
-        self._running = False

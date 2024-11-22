@@ -1,13 +1,13 @@
 import asyncio
-from consoleparts.matrix import Matrix
-from network.server import Server
-from network.custom_wifi import CustomWiFi
 import gc
 import time
-import button_debug.buttons_controller as bc
+import button.buttons_controller as bc
 import board
-from consoleparts.state import State
-from consoleparts.console import Console
+from display.matrix import Matrix
+from network.server import Server
+from network.custom_wifi import CustomWiFi
+from properties.state import State
+from core.console import Console
 
 # Main 1 for production
 # We manually call garbage collector to avoid memory leaks of unclosed socket,
@@ -25,7 +25,7 @@ async def main1():
         return
 
     # Set up the server task to run
-    server_task = asyncio.create_task(Server(State.update_direction).run())
+    server_task = asyncio.create_task(Server(State.update_orientation).run())
     # Set up the console task to run
     # console_task = asyncio.create_task(Console(matrix).run())
 

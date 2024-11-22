@@ -1,7 +1,7 @@
 import board
 import asyncio
 from utility import Direction
-from button_debug.button import Button
+from buttons.button import Button
 
 # ONLY FOR DEBUGGING
 # Listens for button presses and calls callback function on them

@@ -1,5 +1,6 @@
 from game.gameobject import GameObject
-from utility import SCALE, WIDTH, HEIGHT
+from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
+
 
 # Class that represents a ball
 class Ball:
@@ -10,8 +11,8 @@ class Ball:
         self._y_speed = -1
 
     def move(self):
-        self._x += (1 + SCALE) * self._x_speed
-        self._y += (1 + SCALE) * self._y_speed
+        self._x += (1 + WORLD_SIZE) * self._x_speed
+        self._y += (1 + WORLD_SIZE) * self._y_speed
 
         if self._is_collided_with_side(self._y):
             self._y_speed *= -1
@@ -24,13 +25,13 @@ class Ball:
             self._world.end_game()
 
     def _is_collided_with_top(self, x):
-        return x >= (WIDTH - 1 - (1 + SCALE) * 2)
+        return x >= (WIDTH - 1 - (1 + WORLD_SIZE) * 2)
 
     def _is_collided_with_bottom(self, x):
-        return x <= (SCALE + 1)
+        return x <= (WORLD_SIZE + 1)
 
     def _is_collided_with_side(self, y):
-        return y >= (HEIGHT - 1 - (SCALE + 1) * 2) or y <= (SCALE + 1)
+        return y >= (HEIGHT - 1 - (WORLD_SIZE + 1) * 2) or y <= (WORLD_SIZE + 1)
 
     def _is_collided_with_platform(self, x, y):
         platform_pos = self._world.get_platform().get_pos()

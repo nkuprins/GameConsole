@@ -1,7 +1,7 @@
-from consoleparts.state import State, Phase, GameOption
-import snakegame.game as snakegame
-import ponggame.game as ponggame
-import cubesfallgame.game as cubesfallgame
+from properties.state import State, Phase, GameOption
+import games.snake_game.game as sg
+import games.pong_game.game as pg
+import games.cubes_game.game as cg
 import asyncio
 
 # Class to represent game console
@@ -31,14 +31,14 @@ class Console:
     # TODO
     async def _choose_game(self):
         State.phase = Phase.GAME
-        State.game = GameOption.CUBES_FALL
+        State.game = GameOption.CUBES
         return
 
     # TODO
     async def _play_game(self):
         if State.game == GameOption.SNAKE:
-            await snakegame.Game(self._matrix).run()
+            await sg.Game(self._matrix).run()
         elif State.game == GameOption.PONG:
-            await ponggame.Game(self._matrix).run()
-        elif State.game == GameOption.CUBES_FALL:
-            await cubesfallgame.Game(self._matrix).run()
+            await pg.Game(self._matrix).run()
+        elif State.game == GameOption.CUBES:
+            await cg.Game(self._matrix).run()

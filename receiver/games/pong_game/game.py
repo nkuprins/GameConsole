@@ -18,9 +18,8 @@ class Game:
             old_ball = self._world.get_ball().get_pos()
 
             # Move the platform
-            self._world.get_platform().move(State.direction)
-            # Clear the direction
-            State.direction = None
+            direction = Direction.from_orientation(State.orientation)
+            self._world.get_platform().move(direction)
             # Move the ball
             self._world.get_ball().move()
 
@@ -28,6 +27,6 @@ class Game:
             self._view.draw_game(old_platform, old_ball)
 
             # Signal the other task to run and wait for some time
-            await asyncio.sleep(0.07)
+            await asyncio.sleep(0.1)
 
     	

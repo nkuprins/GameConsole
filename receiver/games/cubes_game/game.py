@@ -1,7 +1,7 @@
-from cubesfallgame.world import World
-from cubesfallgame.view import View
-from consoleparts.state import State
-from utility import CUBES_SENSITIVITY
+from games.cubes_game.world import World
+from games.cubes_game.view import View
+from properties.state import State
+from properties.constants import CUBES_GAME_TRIGGER
 import asyncio
 
 # Class to run the pong game
@@ -16,7 +16,7 @@ class Game:
             orientation = State.orientation
             z = orientation[0]
             y = orientation[1]
-            if z == 0 and y == 0 or abs(z) < CUBES_SENSITIVITY and abs(y) < CUBES_SENSITIVITY:
+            if z == 0 and y == 0 or abs(z) < CUBES_GAME_TRIGGER and abs(y) < CUBES_GAME_TRIGGER:
                 await asyncio.sleep(0.3)
                 continue
 
