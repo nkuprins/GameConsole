@@ -34,5 +34,12 @@ class Ball:
         return y >= (HEIGHT - 1 - (WORLD_SIZE + 1) * 2) or y <= (WORLD_SIZE + 1)
 
     def _is_collided_with_platform(self, x, y):
+        y_move = WORLD_SIZE + 1
         platform_pos = self._world.get_platform().get_pos()
-        return self._is_collided((x, y), platform_pos)
+        for i in range(self._world.get_platform_draw_size()):
+            new_pos = (platform_pos[0], platform_pos[1] + i * y_move)
+            if self._is_collided((x, y), new_pos):
+                return True
+
+        return False
+        

@@ -1,5 +1,5 @@
 from game.gameobject import GameObject
-from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
+from properties.constants import HEIGHT, WORLD_SIZE
 from properties.direction import Direction
 
 
