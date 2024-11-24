@@ -46,7 +46,7 @@ class Matrix:
 
     # Draws a square with (WORLD_SIZE + 1) width/height 
     def draw_square(self, top_left, color):
-        self.draw_custom_rectangle(top_left, WORLD_SIZE, color)
+        self.draw_custom_square(top_left, WORLD_SIZE, color)
 
     # Draws a square with (size + 1) width/height 
     def draw_custom_square(self, top_left, size, color):
