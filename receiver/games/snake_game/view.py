@@ -10,6 +10,7 @@ class View(ViewBorder):
         matrix.draw_square(world.get_snake().get_head(), world.get_snake_color())
         # Draw food
         matrix.draw_square(world.get_food().get_pos(), world.get_food_color())
+        matrix.refresh()
 
     def _draw_body(self):
         body = self._world.get_snake().get_body()
@@ -34,3 +35,4 @@ class View(ViewBorder):
             self._clear_sq_at_pos(old_tail)
         # Draw snake body
         self._draw_body()
+        self._matrix.refresh()

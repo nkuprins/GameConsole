@@ -26,7 +26,7 @@ class Matrix:
             addr_pins=[board.GP6, board.GP7, board.GP8, board.GP9],
             clock_pin=board.GP10, latch_pin=board.GP11, output_enable_pin=board.GP12)
 
-        return framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
+        return framebufferio.FramebufferDisplay(matrix, auto_refresh=False)
 
     def _setup_palette(self):
         palette = displayio.Palette(Color.COLORS_COUNT)
@@ -39,6 +39,9 @@ class Matrix:
         group = displayio.Group()
         group.append(tile_grid)
         self._display.root_group = group
+
+    def refresh(self):
+        self._display.refresh()
 
     # Draws a pixel at (x,y) point with color
     def draw_pixel(self, x, y, color):
@@ -93,5 +96,5 @@ class Matrix:
         self.draw_vertical_line(0, color)
         self.draw_vertical_line(WIDTH - WORLD_SIZE - 1, color)
 
-    def has_color(self, pos, color):
-        return self._bitmap[pos[0], pos[1]] == color
+    def has_color(self, x, y, color):
+        return self._bitmap[x, y] == color

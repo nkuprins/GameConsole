@@ -19,15 +19,17 @@ class State:
         State.direction = direction
 
     def update_orientation(data):
-        coords = data.split("*")
-        coord_parts = coords[0].split(",")
-        if len(coord_parts) != 2:
+        coords = data.split("*", 1)[0].split(",")
+        if len(coords) != 2:
             return
-        coord_z = coord_parts[0].split(":")
-        coord_y = coord_parts[1].split(":")
-        if len(coord_z) > 1 and len(coord_y) > 1:
-            z = int(coord_z[1])
-            y = int(coord_y[1])
-            if (z <= 100 or z >= -100) and (y <= 100 or y >= -100):
-                State.orientation = (z, y)
-                print("We set ", State.orientation)
+
+        coord_z = coords[0].split(":")
+        coord_y = coords[1].split(":")
+        if len(coord_z) > 1:
+            z = max(min(int(coord_z[1]), 100), -100)
+            State.orientation = (z, State.orientation[1])
+        if len(coord_y) > 1:
+            y = max(min(int(coord_y[1]), 100), -100)
+            State.orientation = (State.orientation[0], y)
+
+        print("State.orientation = ", State.orientation)

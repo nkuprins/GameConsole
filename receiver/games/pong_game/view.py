@@ -16,6 +16,7 @@ class View(ViewBorder):
         )
         # Draw ball
         matrix.draw_square(world.get_ball().get_pos(), world.get_ball_color())
+        matrix.refresh()
 
     def draw_game(self, old_platform, old_ball):
         w = self._world
@@ -34,3 +35,4 @@ class View(ViewBorder):
             w.get_platform_color(),
             w.get_platform_draw_dir()
         )
+        self._matrix.refresh()

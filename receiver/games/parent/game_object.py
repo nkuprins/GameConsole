@@ -1,7 +1,7 @@
-import random
 from properties.constants import WORLD_SIZE
+from games.parent.pos_object import PosObject
 
-class GameObject:
+class GameObject(PosObject):
 
     # (x, y) is the anchor point
     def __init__(self, x, y, world):
