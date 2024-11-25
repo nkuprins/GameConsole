@@ -9,7 +9,7 @@ CUBES_GAME_TRIGGER = 10
 CUBES_GAME_SIZE = 5
 
 # For controller
-TRIGGER_ANGLE = 30
+TRIGGER_ANGLE = 20
 
 # For the matrix
 WIDTH = 64

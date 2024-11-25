@@ -1,4 +1,4 @@
-from game.gameobject import GameObject
+from games.parent.game_object import GameObject
 from properties.constants import HEIGHT, WORLD_SIZE
 from properties.direction import Direction
 
@@ -16,4 +16,4 @@ class Platform(GameObject):
 
         new_dir = Direction.get_clock_dir(direction)
         new_y = self._y + Direction.to_speed(new_dir)[1]
-        self._y = min(max(new_y, WORLD_SIZE + 1), HEIGHT - (WORLD_SIZE + 1) * 2)
+        self._y = min(max(new_y, WORLD_SIZE + 1), HEIGHT - (WORLD_SIZE + 1) * (self._world.get_platform_draw_size() + 1))

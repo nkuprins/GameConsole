@@ -1,7 +1,7 @@
 import asyncio
 import gc
 import time
-import button.buttons_controller as bc
+import buttons.buttons_controller as bc
 import board
 from display.matrix import Matrix
 from network.server import Server
@@ -17,7 +17,7 @@ async def main1():
 
     # Set up the matrix and wait
     matrix = Matrix()
-    await asyncio.sleep(1)
+    await asyncio.sleep(0.5)
 
     # Set up and connect to wifi
     custom_wifi = CustomWiFi()
@@ -27,11 +27,10 @@ async def main1():
     # Set up the server task to run
     server_task = asyncio.create_task(Server(State.update_orientation).run())
     # Set up the console task to run
-    # console_task = asyncio.create_task(Console(matrix).run())
+    console_task = asyncio.create_task(Console(matrix).run())
 
     # Wait for all tasks to complete
-    #await asyncio.gather(server_task, console_task)
-    await server_task
+    await asyncio.gather(server_task, console_task)
 
     print("DEBUG: before collect ", gc.mem_free())
     gc.collect()

@@ -62,9 +62,10 @@ class Server:
                 if received == 0:
                     print("Client disconnected")
                     break
-
-                data = buffer[:received].decode()
-                self._callback(data)
+                if received > 6:
+                    data = buffer[:received].decode()
+                    self._callback(data)
+                    await asyncio.sleep(0.1)
             except OSError as e:
                 # No incoming data yet
                 if e.args[0] == errno.EAGAIN:

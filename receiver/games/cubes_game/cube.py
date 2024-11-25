@@ -1,6 +1,7 @@
 import random
-from game.gameobject import GameObject
-from utility import Direction, WIDTH, HEIGHT, SCALE, CUBES_SENSITIVITY
+from games.parent.game_object import GameObject
+from properties.constants import WIDTH, HEIGHT, WORLD_SIZE, CUBES_GAME_TRIGGER
+from properties.direction import Direction
 
 # Class that represents a cube
 class Cube(GameObject):

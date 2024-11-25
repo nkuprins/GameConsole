@@ -25,7 +25,7 @@ class Matrix:
             rgb_pins=[board.GP0, board.GP1, board.GP2, board.GP3, board.GP4, board.GP5],
             addr_pins=[board.GP6, board.GP7, board.GP8, board.GP9],
             clock_pin=board.GP10, latch_pin=board.GP11, output_enable_pin=board.GP12)
-        
+
         return framebufferio.FramebufferDisplay(matrix, auto_refresh=True)
 
     def _setup_palette(self):
@@ -44,11 +44,11 @@ class Matrix:
     def draw_pixel(self, x, y, color):
         self._bitmap[x, y] = color
 
-    # Draws a square with (WORLD_SIZE + 1) width/height 
+    # Draws a square with (WORLD_SIZE + 1) width/height
     def draw_square(self, top_left, color):
         self.draw_custom_square(top_left, WORLD_SIZE, color)
 
-    # Draws a square with (size + 1) width/height 
+    # Draws a square with (size + 1) width/height
     def draw_custom_square(self, top_left, size, color):
         for x in range(top_left[0], top_left[0] + size + 1):
             for y in range(top_left[1], top_left[1] + size + 1):
@@ -56,7 +56,7 @@ class Matrix:
 
     # Draws rectangle with number of squares and direction down or right
     def draw_rectangle(self, top_left, squares_num, color, direction):
-        x_move = 0 
+        x_move = 0
         y_move = 0
         if direction == Direction.DOWN:
             y_move = WORLD_SIZE + 1

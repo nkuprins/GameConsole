@@ -1,5 +1,6 @@
 from games.parent.game_object import GameObject
-from properties.constants import Direction, WIDTH, HEIGHT, WORLD_SIZE
+from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
+from properties.direction import Direction
 from games.snake_game.food import Food
 
 # Class that represents a snake
@@ -22,9 +23,9 @@ class Snake(GameObject):
         return self._body
 
     def set_direction(self, new_direction):
-        # Return if we try to set the opposite direction 
+        # Return if we try to set the opposite direction
         # (if we are UP we can not immediately go DOWN)
-        if new_direction is None or Direction.opposite(new_direction, self._direction)
+        if new_direction is None or Direction.opposite(new_direction, self._direction):
             return
 
         self._direction = new_direction

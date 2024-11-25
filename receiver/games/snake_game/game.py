@@ -14,7 +14,8 @@ class Game:
     async def run(self):
         while self._world.is_running():
             # Set the snake direction
-            direction = Direction.from_orientation(State.orientation)
+            direction = Direction.from_orientation()
+            print(direction)
             self._world.get_snake().set_direction(direction)
 
             # Save old snake positions

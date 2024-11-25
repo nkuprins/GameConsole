@@ -9,7 +9,7 @@ class View(ViewBorder):
         # Draw snake head
         matrix.draw_square(world.get_snake().get_head(), world.get_snake_color())
         # Draw food
-        matrix.draw_square(world.get_food().get_pos(), world.get_food_color())        
+        matrix.draw_square(world.get_food().get_pos(), world.get_food_color())
 
     def _draw_body(self):
         body = self._world.get_snake().get_body()
