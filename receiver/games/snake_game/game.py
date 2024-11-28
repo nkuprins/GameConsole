@@ -21,7 +21,7 @@ class Game:
             # Save old snake positions
             old_head = self._world.get_snake().get_head()
             old_food = self._world.get_food().get_pos()
-            old_tail = self._world.get_snake().try_get_tail()
+            old_tail = self._world.get_snake().get_tail()
 
             # Move the snake
             self._world.get_snake().move()

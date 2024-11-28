@@ -14,7 +14,7 @@ class Snake(GameObject):
     def get_head(self):
         return self.get_pos()
 
-    def try_get_tail(self):
+    def get_tail(self):
         if len(self._body) > 0:
             return self._body[-1]
         return None
@@ -36,8 +36,9 @@ class Snake(GameObject):
     # If new snake position is collided with itself or with a border,
     # then end the game
     def move(self):
-        new_x = self._x + Direction.to_speed(self._direction)[0]
-        new_y = self._y + Direction.to_speed(self._direction)[1]
+        x_speed, y_speed = Direction.to_speed(self._direction)
+        new_x = self._x + x_speed
+        new_y = self._y + y_speed
 
         if self._is_collided_with_body(new_x, new_y) or self._is_collided_with_border(new_x, new_y):
             self._world.end_game()
@@ -60,21 +61,17 @@ class Snake(GameObject):
         # The first body element after snake head is at index 0. It moves to old snake head position
         if (len(self._body) != 0):
             self._body[0] = (self._x, self._y)
-
-    # if scale is 0 then border is at pixel 0, and if 1 then at 0-1 pixels
-    def _is_collided_with_border(self, x, y):
-        return x <= WORLD_SIZE or y <= WORLD_SIZE or \
-            x >= (WIDTH - 1 - WORLD_SIZE) or y >= (HEIGHT - 1 - WORLD_SIZE)
+    
 
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:
-            if (self._is_collided((x, y), body_part)):
+            if (self._is_collided_with_pos((x, y), body_part)):
                 return True
         return False
 
     def is_collided_with_snake(self, x, y):
-        return self._is_collided_with_body(x, y) or self._x == x and self._y == y
+        return self._is_collided_with_body(x, y) or self._is_collided_with_pos((x, y), self.get_head())
 
     def _is_collided_with_food(self, x, y):
         food_pos = self._world.get_food().get_pos()
-        return self._is_collided((x, y), food_pos)
+        return self._is_collided_with_pos((x, y), food_pos)

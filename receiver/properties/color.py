@@ -1,7 +1,7 @@
 import random
 
 class Color:
-    COLORS_COUNT = 7
+    COLORS_COUNT = 8
 
     BLACK = 0
     LIGHT_GREEN = 1
@@ -10,6 +10,7 @@ class Color:
     WHITE = 4
     YELLOW = 5
     BLUE = 6
+    ORANGE = 7
 
     _HEX_MAP = {
         BLACK: 0x000000,
@@ -19,6 +20,7 @@ class Color:
         WHITE: 0xffffff,
         YELLOW: 0xfef65b,
         BLUE: 0x4974a5,
+        ORANGE: 0xffa500
     }
 
     def colors():

@@ -14,11 +14,11 @@ class View(ViewObject):
         for cube in self._world.get_cubes():
             self._matrix.draw_pixel(cube.get_x(), cube.get_y(), cube.get_color())
 
-    def draw_cube(self, x, y, old_x):
+    def draw_cube(self, x, y, old_x, old_y, color):
         # Clear cube
         self._clear_pixel_at_pos(old_x, old_y)
         # Draw cube
-        self._matrix.draw_pixel(x, y, cube.get_color())
+        self._matrix.draw_pixel(x, y, color)
 
     def refresh_cubes(self):
         self._matrix.refresh()

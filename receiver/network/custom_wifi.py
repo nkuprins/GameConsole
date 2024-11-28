@@ -10,8 +10,7 @@ class CustomWiFi:
         self._password = WIFI_PSWD
 
     def connect(self):
-        self._reset()
-        self._scan_networks()
+        #self._scan_networks()
 
         try:
             print(self._ssid)
@@ -22,15 +21,6 @@ class CustomWiFi:
         except ConnectionError as e:
             print("ERROR: Failed to connect to wifi - ", e)
             return False
-        except Exception as e:
-            print("ERROR: An unexpected error occurred - ", e)
-            return False
-
-    # Reset WiFi to avoid weird bugs
-    def _reset(self):
-        wifi.radio.enabled = False
-        time.sleep(1)
-        wifi.radio.enabled = True
 
     # Only for debugging to check if hardware works
     def _scan_networks(self):

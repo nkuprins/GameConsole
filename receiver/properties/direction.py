@@ -41,14 +41,14 @@ class Direction:
         return Direction._MAP.get(direction_str, None)
 
     def from_orientation():
-        if State.orientation[0] >= TRIGGER_ANGLE:
-            return Direction.LEFT
-        elif State.orientation[0] <= -TRIGGER_ANGLE:
-            return Direction.RIGHT
-        elif State.orientation[1] >= TRIGGER_ANGLE:
-            return Direction.UP
-        elif State.orientation[1] <= -TRIGGER_ANGLE:
-            return Direction.DOWN
+        z, y = State.orientation
+        best = max(z, y, key=abs)
+
+        if abs(best) >= TRIGGER_ANGLE:
+            if best == z:
+                return Direction.LEFT if z > 0 else Direction.RIGHT
+            else:
+                return Direction.UP if y > 0 else Direction.DOWN
         return None
 
     def to_speed(direction):

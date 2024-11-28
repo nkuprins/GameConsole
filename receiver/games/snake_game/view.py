@@ -7,7 +7,7 @@ class View(ViewBorder):
     def __init__(self, world, matrix):
         super().__init__(world, matrix)
         # Draw snake head
-        matrix.draw_square(world.get_snake().get_head(), world.get_snake_color())
+        matrix.draw_square(world.get_snake().get_head(), world.get_head_color())
         # Draw food
         matrix.draw_square(world.get_food().get_pos(), world.get_food_color())
         matrix.refresh()
@@ -15,7 +15,7 @@ class View(ViewBorder):
     def _draw_body(self):
         body = self._world.get_snake().get_body()
         for body_part in body:
-            self._matrix.draw_square(body_part, self._world.get_snake_color())
+            self._matrix.draw_square(body_part, self._world.get_body_color())
 
     def draw_game(self, old_head, old_food, old_tail):
         w = self._world
@@ -28,7 +28,7 @@ class View(ViewBorder):
         # Clear snake head
         self._clear_sq_at_pos(old_head)
         # Draw snake head
-        self._matrix.draw_square(w.get_snake().get_head(), w.get_snake_color())
+        self._matrix.draw_square(w.get_snake().get_head(), w.get_head_color())
 
         if old_tail is not None:
             # Clean tail

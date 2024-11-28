@@ -1,5 +1,5 @@
 from games.parent.game_object import GameObject
-from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
+from properties.constants import WORLD_SIZE
 
 
 # Class that represents a ball
@@ -7,40 +7,42 @@ class Ball(GameObject):
 
     def __init__(self, x, y, world):
         super().__init__(x, y, world)
-        self._x_speed = 1
-        self._y_speed = -1
+        self._x_speed = 1 + WORLD_SIZE
+        self._y_speed = 1 + WORLD_SIZE
 
     def move(self):
-        self._x += (1 + WORLD_SIZE) * self._x_speed
-        self._y += (1 + WORLD_SIZE) * self._y_speed
+        new_x = self._get_x_movement()
+        new_y = self._y + self._y_speed
 
-        if self._is_collided_with_side(self._y):
+        if self._is_collided_with_side(new_y):
             self._y_speed *= -1
-        elif self._is_collided_with_platform(self._x, self._y):
+            new_y = self._get_y_movement()
+        elif self._is_collided_with_platform(new_x, new_y):
             self._x_speed *= -1
+            new_x = self._get_x_movement()
             self._world.increase_score()
-        elif self._is_collided_with_top(self._x):
+        elif self._is_collided_with_top(new_x):
             self._x_speed *= -1
-        elif self._is_collided_with_bottom(self._x):
+            new_x = self._get_x_movement()
+        elif self._is_collided_with_bottom(new_x):
             self._world.end_game()
+            return
 
-    def _is_collided_with_top(self, x):
-        return x >= (WIDTH - 1 - (1 + WORLD_SIZE) * 2)
+        self._x = new_x
+        self._y = new_y
 
-    def _is_collided_with_bottom(self, x):
-        return x <= (WORLD_SIZE + 1)
+    def _get_x_movement(self):
+        return self._x + self._x_speed
 
-    def _is_collided_with_side(self, y):
-        return y >= (HEIGHT - 1 - (WORLD_SIZE + 1) * 2) or y <= (WORLD_SIZE + 1)
+    def _get_y_movement(self):
+        return self._y + self._x_speed
 
     def _is_collided_with_platform(self, x, y):
-        y_move = WORLD_SIZE + 1
-        platform_pos = self._world.get_platform().get_pos()
-        pos = (platform_pos[0] + WORLD_SIZE, platform_pos[1])
-        for i in range(self._world.get_platform_draw_size() + 2):
-            new_pos = (pos[0], pos[1] + i * y_move)
-            if self._is_collided((x, y), new_pos):
-                return True
+        platform_x, platform_y = self._world.get_platform().get_pos()
 
+        for i in range(self._world.get_platform_draw_size()):
+            new_pos = (platform_x, platform_y + i * (WORLD_SIZE + 1))
+            if self._is_collided_with_pos((x, y), new_pos):
+                return True
         return False
 

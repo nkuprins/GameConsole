@@ -41,7 +41,6 @@ class Server:
             self._close_client(client_socket)
             self._close_server()
             wifi.radio.enabled = False
-            time.sleep(2)
 
     # Closes the client connection if exists
     def _close_client(self, client_socket):
@@ -55,22 +54,25 @@ class Server:
 
     # Reads from client_socket if can, and calls the callback function
     async def _handle_client(self, client_socket):
-        buffer = bytearray(20)
         while True:
             try:
-                received = client_socket.recv_into(buffer, 20)
+                temp_buffer = bytearray(100)
+                received = client_socket.recv_into(temp_buffer, 100)
                 if received == 0:
                     print("Client disconnected")
                     break
-                if received > 6:
-                    data = buffer[:received].decode()
-                    self._callback(data)
-                    await asyncio.sleep(0.1)
+
+                last_index = temp_buffer.rindex(b'*')
+                second_last_index = temp_buffer.rfind(b'*', 0, last_index)
+
+                if second_last_index != -1 and last_index != second_last_index:
+                    full_message = temp_buffer[second_last_index + 1:last_index].decode()
+                    self._callback(full_message)
             except OSError as e:
                 # No incoming data yet
                 if e.args[0] == errno.EAGAIN:
                     # Signal the other task to run
-                    await asyncio.sleep(0.1)
+                    await asyncio.sleep(0.0)
 
     async def _accept_connection(self):
         while True:
@@ -82,5 +84,5 @@ class Server:
                 # No incoming connections yet
                 if e.args[0] == errno.EAGAIN:
                     # Signal the other task to run
-                    await asyncio.sleep(0.1)
+                    await asyncio.sleep(0.0)
 

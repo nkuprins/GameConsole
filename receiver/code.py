@@ -17,7 +17,6 @@ async def main1():
 
     # Set up the matrix and wait
     matrix = Matrix()
-    await asyncio.sleep(0.5)
 
     # Set up and connect to wifi
     custom_wifi = CustomWiFi()
@@ -35,7 +34,7 @@ async def main1():
     print("DEBUG: before collect ", gc.mem_free())
     gc.collect()
     # Wait for sockets to be closed to avoid memory leak
-    time.sleep(2)
+    await asyncio.sleep(2.0)
     print("DEBUG: after collect ", gc.mem_free())
 
 # Main 2 for debugging

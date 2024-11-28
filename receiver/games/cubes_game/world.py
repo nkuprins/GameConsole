@@ -21,11 +21,10 @@ class World(WorldObject):
                 color = Color.random_color()
                 self._cubes.append(Cube(i, j, color, self))
 
-    def _generate_accelerations():
+    def _generate_accelerations(self):
         accelerate_map = {}
         for orientation_axis in range(CUBES_GAME_TRIGGER, 102):
-            for _ in range(5):
-                accelerate_map[orientation_axis] = self._random_speed(orientation_axis)
+            accelerate_map[orientation_axis] = [self._random_accelerate(orientation_axis) for _ in range(5)]
         self._accelerate_map = accelerate_map
 
         index_map = {}
@@ -40,9 +39,8 @@ class World(WorldObject):
     def should_accelerate(self, orientation_axis):
         orientation_axis = abs(orientation_axis)
         index = self._index_map[orientation_axis]
-        result = self._accelerate_map[orientation_axis][index]
         self._index_map[orientation_axis] = (index + 1) % 5
-        return result
+        return self._accelerate_map[orientation_axis][index]
 
     def get_cubes(self):
         return self._cubes

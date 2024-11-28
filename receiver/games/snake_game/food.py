@@ -9,7 +9,7 @@ class Food(GameObject):
         super().__init__(x, y, world)
 
     def _random_spawn_coord(self, limit):
-        return random.randint(WORLD_SIZE + 1, limit - 1 - WORLD_SIZE)
+        return random.randrange(WORLD_SIZE + 1, limit - 3 - WORLD_SIZE, 2)
 
     def random_spawn(self):
         new_x = self._random_spawn_coord(WIDTH)

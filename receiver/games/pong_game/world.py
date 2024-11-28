@@ -10,8 +10,8 @@ class World(WorldBorder):
 
     def __init__(self):
         super().__init__(Color.BLACK, Color.BLUE)
-        self._platform = Platform(5 + WORLD_SIZE, int(HEIGHT / 2), self)
-        self._ball = Ball(self._platform.get_x() + 1 + WORLD_SIZE, int(HEIGHT / 2), self)
+        self._platform = Platform(WORLD_SIZE + 5, int(HEIGHT / 2), self)
+        self._ball = Ball(self._platform.get_x() + WORLD_SIZE + 1, int(HEIGHT / 2), self)
 
     def get_platform(self):
         return self._platform
