@@ -5,10 +5,7 @@
 #include <ESP8266WiFi.h>
 
 // Set the delay between fresh samples
-#define BNO055_SAMPLERATE_DELAY_MS 100
-#define TRIGGER_ANGLE 30
-#define DEFAULT_ANGLE 15
-
+#define BNO055_SAMPLERATE_DELAY_MS 200
 // Set the delay between new reconnection attempts
 #define RECONNECTION_DELAY_MS 100
 
@@ -19,11 +16,9 @@ const uint16_t port = 80;
 const char* ssid = "NDL_24G";
 const char* password = "RT-AC66U"; 
 
-bool in_default = false;
-
 WiFiClient client;
 
-void connectToWifi() {
+void connect_to_wifi() {
   WiFi.begin(ssid, password);
   Serial.println("Start connecting.");
   while (WiFi.status() != WL_CONNECTED) {
@@ -34,7 +29,7 @@ void connectToWifi() {
   Serial.println("Connected to Wifi");
 }
 
-void connectToServer() {
+void connect_to_server() {
   Serial.println("Connecting to server...");
   if (client.connect(server, port)) {
     Serial.println("Connected to server");
@@ -43,47 +38,20 @@ void connectToServer() {
   }
 }
 
-void sendDirection(String direction) {
-  client.print(direction);
-  Serial.println("Sent: " + direction);
-}
-
-void checkAndSendDirection(bool triggered, const char* direction) {
-  if (triggered) {
-    Serial.println(direction);
-    sendDirection(direction);
-    in_default = false;
-  }
-}
-
 void process_event(sensors_event_t event) {
   int z = event.orientation.z;
-  int y = event.orientation.y;
-  
-  if (z < DEFAULT_ANGLE && z > -DEFAULT_ANGLE &&
-        y < DEFAULT_ANGLE && y > -DEFAULT_ANGLE)
-        in_default = true;
-
-  if (!in_default) return;
-
-  checkAndSendDirection(z >= TRIGGER_ANGLE, "LEFT");
-  checkAndSendDirection(z <= -TRIGGER_ANGLE, "RIGHT");
-  checkAndSendDirection(y >= TRIGGER_ANGLE, "UP");
-  checkAndSendDirection(y <= -TRIGGER_ANGLE, "DOWN");
-}
-
-void process_event_new(sensors_event_t event) {
-  int z = event.orientation.z;
   int y = event.orientation.y; 
-  sendDirection("z:" + String(z) + ",y:" + String(y));
+  String direction = "z:" + String(z) + ",y:" + String(y) + "*";
+  client.print(direction);
+  Serial.println("Sent at time=" + String(millis()) + ": " + direction);
 }
 
 void setup(void) {
   Serial.begin(115200);
   while (!Serial) delay(10);
 
-  connectToWifi();
-  connectToServer();
+  connect_to_wifi();
+  connect_to_server();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
@@ -99,7 +67,7 @@ void setup(void) {
 
 void loop(void) {
   if (!client.connected()) {
-    connectToServer();
+    connect_to_server();
     delay(RECONNECTION_DELAY_MS);
   } else {
     sensors_event_t event;
