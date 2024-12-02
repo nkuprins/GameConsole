@@ -1,6 +1,6 @@
-from games.parent.view_object import ViewObject
+from games.parent.view_parent import ViewParent
 
-class ViewBorder(ViewObject):
+class ViewBorder(ViewParent):
 
     def __init__(self, world, matrix):
         super().__init__(world, matrix)

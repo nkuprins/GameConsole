@@ -1,6 +1,3 @@
-from games.pong_game.world import World
-from properties.color import Color
-from properties.direction import Direction
 from games.parent.view_border import ViewBorder
 
 class View(ViewBorder):
@@ -20,19 +17,20 @@ class View(ViewBorder):
 
     def draw_game(self, old_platform, old_ball):
         w = self._world
+        m = self._matrix
 
         # Clear ball
         self._clear_sq_at_pos(old_ball)
         # Draw ball
-        self._matrix.draw_square(w.get_ball().get_pos(), w.get_ball_color())
+        m.draw_square(w.get_ball().get_pos(), w.get_ball_color())
 
         # Clear platform
         self._clear_rct_at_pos(old_platform, w.get_platform_draw_size(), w.get_platform_draw_dir())
         # Draw platform
-        self._matrix.draw_rectangle(
+        m.draw_rectangle(
             w.get_platform().get_pos(),
             w.get_platform_draw_size(),
             w.get_platform_color(),
             w.get_platform_draw_dir()
         )
-        self._matrix.refresh()
+        m.refresh()

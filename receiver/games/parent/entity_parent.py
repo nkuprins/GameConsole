@@ -1,24 +1,13 @@
 from properties.constants import WORLD_SIZE, WIDTH, HEIGHT
-from games.parent.coords_object import CoordsObject
+from games.parent.pos import Pos
 
-class GameObject(CoordsObject):
+class EntityParent(Pos):
 
-    # (x, y) is the anchor point
     def __init__(self, x, y, world):
-        self._x = x
-        self._y = y
+        super().__init__(x, y, world)
         self._world = world
 
-    def get_x(self):
-        return self._x
-
-    def get_y(self):
-        return self._y
-
-    def get_pos(self):
-        return (self._x, self._y)
-
-    # True if pos_a is collided with pos_b
+    # True if pos1 is collided with pos2
     def _is_collided_with_pos(self, pos1, pos2):
         x_start1, y_start1 = pos1
         x_end1 = x_start1 + WORLD_SIZE

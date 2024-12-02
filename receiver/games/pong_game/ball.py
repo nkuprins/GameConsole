@@ -1,9 +1,7 @@
-from games.parent.game_object import GameObject
+from games.parent.entity_parent import EntityParent
 from properties.constants import WORLD_SIZE
 
-
-# Class that represents a ball
-class Ball(GameObject):
+class Ball(EntityParent):
 
     def __init__(self, x, y, world):
         super().__init__(x, y, world)
@@ -12,19 +10,19 @@ class Ball(GameObject):
 
     def move(self):
         new_x = self._get_x_movement()
-        new_y = self._y + self._y_speed
+        new_y = self._get_y_movement()
 
-        if self._is_collided_with_side(new_y):
+        if self._is_collided_with_side_v(new_y):
             self._y_speed *= -1
             new_y = self._get_y_movement()
         elif self._is_collided_with_platform(new_x, new_y):
             self._x_speed *= -1
             new_x = self._get_x_movement()
             self._world.increase_score()
-        elif self._is_collided_with_top(new_x):
+        elif self._is_collided_with_top_v(new_x):
             self._x_speed *= -1
             new_x = self._get_x_movement()
-        elif self._is_collided_with_bottom(new_x):
+        elif self._is_collided_with_bottom_v(new_x):
             self._world.end_game()
             return
 
@@ -35,7 +33,7 @@ class Ball(GameObject):
         return self._x + self._x_speed
 
     def _get_y_movement(self):
-        return self._y + self._x_speed
+        return self._y + self._y_speed
 
     def _is_collided_with_platform(self, x, y):
         platform_x, platform_y = self._world.get_platform().get_pos()

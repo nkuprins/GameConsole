@@ -1,15 +1,14 @@
-from games.pong_game.world import World
-from games.pong_game.view import View
-from properties.state import State
-from properties.direction import Direction
 import asyncio
 import time
+from games.pong_game.view import View
+from games.pong_game.world import World
+from properties.direction import Direction
+from properties.constants import PONG_GAME_DELAY
 
-# Class to run the pong game
 class Game:
 
     def __init__(self, matrix):
-    	self._world = World()
+        self._world = World()
         self._view = View(self._world, matrix)
 
     async def run(self):
@@ -23,10 +22,11 @@ class Game:
 
             elapsed_time = time.monotonic() - start_time
             new_direction = Direction.from_orientation()
-            if Direction.opposite(direction, new_direction) or elapsed_time > 0.2:
+            # Move only if time elapsed or if move is in the opposite direction
+            if Direction.is_opposite(direction, new_direction) or elapsed_time > 0.2:
                 # Move the platform
                 direction = new_direction
-                print(direction)
+                # print(direction)
                 self._world.get_platform().move(direction)
                 start_time = time.monotonic()
 
@@ -37,6 +37,6 @@ class Game:
             self._view.draw_game(old_platform, old_ball)
 
             # Signal the other task to run and wait for some time
-            await asyncio.sleep(max(0.6 - self._world.get_score() / 100, 0.05))
+            await asyncio.sleep(max(PONG_GAME_DELAY - self._world.get_score() / 100, 0.05))
 
-    	
+

@@ -29,6 +29,7 @@ class Color:
     def to_hex(color):
         return Color._HEX_MAP.get(color, None)
 
+    # Can be extended to randomize by different `colors` but not needed for now
     def random_color():
         colors = [Color.BLUE, Color.RED, Color.YELLOW, Color.DARK_GREEN]
         index = random.randint(0, len(colors) - 1)

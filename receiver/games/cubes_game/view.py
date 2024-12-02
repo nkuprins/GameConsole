@@ -1,12 +1,9 @@
-from games.cubes_game.world import World
-from properties.color import Color
-from games.parent.view_object import ViewObject
+from games.parent.view_parent import ViewParent
 
-class View(ViewObject):
+class View(ViewParent):
 
     def __init__(self, world, matrix):
         super().__init__(world, matrix)
-        # Draw cubes
         self._draw_cubes()
         matrix.refresh()
 
@@ -15,9 +12,7 @@ class View(ViewObject):
             self._matrix.draw_pixel(cube.get_x(), cube.get_y(), cube.get_color())
 
     def draw_cube(self, x, y, old_x, old_y, color):
-        # Clear cube
         self._clear_pixel_at_pos(old_x, old_y)
-        # Draw cube
         self._matrix.draw_pixel(x, y, color)
 
     def refresh_cubes(self):

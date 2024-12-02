@@ -5,13 +5,13 @@ from properties.constants import HEIGHT, WORLD_SIZE
 from properties.color import Color
 from properties.direction import Direction
 
-# State of the pong game
 class World(WorldBorder):
 
     def __init__(self):
         super().__init__(Color.BLACK, Color.BLUE)
-        self._platform = Platform(WORLD_SIZE + 5, int(HEIGHT / 2), self)
-        self._ball = Ball(self._platform.get_x() + WORLD_SIZE + 1, int(HEIGHT / 2), self)
+        platform_x = WORLD_SIZE + 5
+        self._platform = Platform(platform_x, int(HEIGHT / 2), self)
+        self._ball = Ball(platform_x + WORLD_SIZE + 1, int(HEIGHT / 2), self)
 
     def get_platform(self):
         return self._platform

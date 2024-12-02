@@ -1,5 +1,4 @@
-class ViewObject:
-
+class ViewParent:
     def __init__(self, world, matrix):
         self._world = world
         self._matrix = matrix
@@ -12,4 +11,4 @@ class ViewObject:
         self._matrix.draw_square(pos, self._world.get_background_color())
 
     def _clear_rct_at_pos(self, pos, squares_num, direction):
-        self._matrix.draw_rectangle(pos, 3, self._world.get_background_color(), direction)
+        self._matrix.draw_rectangle(pos, squares_num, self._world.get_background_color(), direction)

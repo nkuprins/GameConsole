@@ -1,7 +1,6 @@
-from games.parent.coords_object import CoordsObject
+from games.parent.coords import Coords
 
-# Class that represents a cube
-class Cube(CoordsObject):
+class Cube(Coords):
 
     def __init__(self, x, y, color, world):
         super().__init__(x, y, world)

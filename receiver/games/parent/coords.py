@@ -1,4 +1,4 @@
-class CoordsObject:
+class Coords:
 
     # (x, y) is the anchor point
     def __init__(self, x, y, world):

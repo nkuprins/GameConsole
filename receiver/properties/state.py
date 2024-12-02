@@ -1,7 +1,7 @@
-
 class Phase:
     MENU = 0
-    GAME = 1
+    GAME_RUNNING = 1
+    GAME_OVER = 2
 
 class GameOption:
     SNAKE = 0
@@ -18,13 +18,12 @@ class State:
     def update_direction(direction):
         State.direction = direction
 
+    # Input like: "z:10,y:-10"
     def update_orientation(data):
         coords = data.split(",")
         coord_z = coords[0].split(":")
         coord_y = coords[1].split(":")
-        print(coords)
-        z = max(min(int(coord_z[1]), 100), -100)
-        y = max(min(int(coord_y[1]), 100), -100)
+        z = int(coord_z[1])
+        y = int(coord_y[1])
         State.orientation = (z, y)
-
         #print("State.orientation = ", State.orientation)

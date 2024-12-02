@@ -1,10 +1,7 @@
-from games.parent.game_object import GameObject
-from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
+from games.parent.entity_parent import EntityParent
 from properties.direction import Direction
-from games.snake_game.food import Food
 
-# Class that represents a snake
-class Snake(GameObject):
+class Snake(EntityParent):
 
     def __init__(self, x, y, world):
         super().__init__(x, y, world)
@@ -24,17 +21,12 @@ class Snake(GameObject):
 
     def set_direction(self, new_direction):
         # Return if we try to set the opposite direction
-        # (if we are UP we can not immediately go DOWN)
-        if new_direction is None or Direction.opposite(new_direction, self._direction):
+        # e.g. if we are UP we can not immediately go DOWN
+        if new_direction is None or Direction.is_opposite(new_direction, self._direction):
             return
 
         self._direction = new_direction
 
-    # Moves snake by speed
-    # If new snake position is collided with a food,
-    # then increase snake size and score and spawn new food
-    # If new snake position is collided with itself or with a border,
-    # then end the game
     def move(self):
         x_speed, y_speed = Direction.to_speed(self._direction)
         new_x = self._x + x_speed
@@ -56,16 +48,17 @@ class Snake(GameObject):
     def _move_body(self):
         # All elements from len(body)-1...1 move to the place of the next one
         for i in range(len(self._body) - 1, 0, -1):
-            self._body[i] = (self._body[i - 1][0], self._body[i - 1][1]);
+            self._body[i] = (self._body[i - 1][0], self._body[i - 1][1])
 
-        # The first body element after snake head is at index 0. It moves to old snake head position
-        if (len(self._body) != 0):
+        # The first body element after snake head is at index 0
+        # Move it to old snake's head position
+        if len(self._body) != 0:
             self._body[0] = (self._x, self._y)
     
 
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:
-            if (self._is_collided_with_pos((x, y), body_part)):
+            if self._is_collided_with_pos((x, y), body_part):
                 return True
         return False
 

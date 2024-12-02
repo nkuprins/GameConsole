@@ -1,4 +1,5 @@
-class WorldObject:
+# State for running games
+class WorldParent:
 
     def __init__(self, background_color):
         self._running = True

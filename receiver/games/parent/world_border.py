@@ -1,6 +1,6 @@
-from games.parent.world_object import WorldObject
+from games.parent.world_parent import WorldParent
 
-class WorldBorder(WorldObject):
+class WorldBorder(WorldParent):
 
     def __init__(self, background_color, border_color):
         super().__init__(background_color)

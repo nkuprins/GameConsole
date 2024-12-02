@@ -1,24 +1,28 @@
-from properties.state import State, Phase, GameOption
-import games.snake_game.game as sg
-import games.pong_game.game as pg
 import games.cubes_game.game as cg
-import asyncio
+import games.pong_game.game as pg
+import games.snake_game.game as sg
+from games.game_over.game_over import GameOver
+from properties.state import State, Phase, GameOption
 
-# Class to represent game console
 class Console:
 
     def __init__(self, matrix):
         self._matrix = matrix
 
-    # The core of all console functionality
     async def run(self):
         await self._show_logo()
+        game_over = GameOver(self._matrix)
 
         while True:
             if State.phase == Phase.MENU:
                 await self._choose_game()
-            elif State.phase == Phase.GAME:
+                State.phase = Phase.GAME_RUNNING
+            elif State.phase == Phase.GAME_RUNNING:
                 await self._play_game()
+                State.phase = Phase.GAME_OVER
+            elif State.phase == Phase.GAME_RUNNING:
+                await game_over.run()
+                State.phase = game_over.next_phase()
 
     # TODO
     async def _show_logo(self):
@@ -27,15 +31,16 @@ class Console:
 
     # TODO
     async def _choose_game(self):
-        State.phase = Phase.GAME
-        State.game = GameOption.SNAKE
+        State.game = GameOption.CUBES
         return
 
     # TODO
     async def _play_game(self):
+        game = None
         if State.game == GameOption.SNAKE:
-            await sg.Game(self._matrix).run()
+            game = sg.Game(self._matrix)
         elif State.game == GameOption.PONG:
-            await pg.Game(self._matrix).run()
+            game = pg.Game(self._matrix)
         elif State.game == GameOption.CUBES:
-            await cg.Game(self._matrix).run()
+            game = cg.Game(self._matrix)
+        await game.run()

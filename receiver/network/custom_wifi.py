@@ -1,8 +1,6 @@
 import wifi
-import time
 from properties.constants import SSID, WIFI_PSWD
 
-# Class to set up wifi connection
 class CustomWiFi:
 
     def __init__(self):
@@ -13,8 +11,6 @@ class CustomWiFi:
         #self._scan_networks()
 
         try:
-            print(self._ssid)
-            print(self._password)
             wifi.radio.connect(self._ssid, self._password, timeout=10)
             print("INFO: Connected to", self._ssid, "IP - ", wifi.radio.ipv4_address)
             return True

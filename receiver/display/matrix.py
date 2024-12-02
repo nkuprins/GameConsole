@@ -2,7 +2,6 @@ import board
 import displayio
 import rgbmatrix
 import framebufferio
-import asyncio
 from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
 from properties.direction import Direction
 from properties.color import Color
@@ -12,14 +11,15 @@ class Matrix:
 
     def __init__(self):
         self._display = self._setup_display()
+        self._group = displayio.Group()
         self._bitmap = displayio.Bitmap(self._display.width, self._display.height, Color.COLORS_COUNT)
         self._palette = self._setup_palette()
-        self._setup_group()
+        self._setup_root()
 
     def _setup_display(self):
+        # To avoid screen not released bugs
         displayio.release_displays()
 
-        # Setup the RGB matrix
         matrix = rgbmatrix.RGBMatrix(
             width=WIDTH, height=HEIGHT, bit_depth=2,
             rgb_pins=[board.GP0, board.GP1, board.GP2, board.GP3, board.GP4, board.GP5],
@@ -34,11 +34,22 @@ class Matrix:
             palette[id] = value
         return palette
 
-    def _setup_group(self):
+    def _setup_root(self):
         tile_grid = displayio.TileGrid(self._bitmap, pixel_shader=self._palette)
-        group = displayio.Group()
-        group.append(tile_grid)
-        self._display.root_group = group
+        self._group.append(tile_grid)
+        self._display.root_group = self._group
+
+    def object_append(self, obj):
+        self._group.append(obj)
+
+    def object_remove(self, obj):
+        if obj is not None:
+            self._group.remove(obj)
+
+    def has_color(self, x, y, color):
+        if 0 <= x <= WIDTH - 1 and 0 <= y <= HEIGHT - 1:
+            return self._bitmap[x, y] == color
+        return False
 
     def refresh(self):
         self._display.refresh()
@@ -95,6 +106,3 @@ class Matrix:
         self.draw_horizontal_line(HEIGHT - WORLD_SIZE - 1, color)
         self.draw_vertical_line(0, color)
         self.draw_vertical_line(WIDTH - WORLD_SIZE - 1, color)
-
-    def has_color(self, x, y, color):
-        return self._bitmap[x, y] == color

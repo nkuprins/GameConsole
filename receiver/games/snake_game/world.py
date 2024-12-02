@@ -4,7 +4,6 @@ from games.parent.world_border import WorldBorder
 from properties.constants import HEIGHT, WORLD_SIZE
 from properties.color import Color
 
-# State of the snake game
 class World(WorldBorder):
 
     def __init__(self):

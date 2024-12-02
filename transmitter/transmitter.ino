@@ -41,17 +41,31 @@ void connect_to_server() {
 void process_event(sensors_event_t event) {
   int z = event.orientation.z;
   int y = event.orientation.y; 
+  
+  // When upside down we want to treat 180 as starting degree
+  if (z > 90) {
+    z = -180 + z;
+  } else if (z < -90) {
+    z = 180 + z;
+  }
+
+  if (y > 90) {
+    y = -180 + y;
+  } else if (y < -90) {
+    y = 180 + y;
+  }
+  
   String direction = "z:" + String(z) + ",y:" + String(y) + "*";
-  client.print(direction);
-  Serial.println("Sent at time=" + String(millis()) + ": " + direction);
+  // client.print(direction);
+  Serial.println("Sent: " + direction);
 }
 
 void setup(void) {
   Serial.begin(115200);
   while (!Serial) delay(10);
 
-  connect_to_wifi();
-  connect_to_server();
+//  connect_to_wifi();
+//  connect_to_server();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
@@ -66,13 +80,17 @@ void setup(void) {
 }
 
 void loop(void) {
-  if (!client.connected()) {
-    connect_to_server();
-    delay(RECONNECTION_DELAY_MS);
-  } else {
+//  if (!client.connected()) {
+//    connect_to_server();
+//    delay(RECONNECTION_DELAY_MS);
+//  } else {
+//    sensors_event_t event;
+//    bno.getEvent(&event);
+//    process_event(event);
+//    delay(BNO055_SAMPLERATE_DELAY_MS);
+//  }
     sensors_event_t event;
     bno.getEvent(&event);
     process_event(event);
     delay(BNO055_SAMPLERATE_DELAY_MS);
-  }
 }

@@ -1,15 +1,19 @@
-import random
-
 # For the network
 SSID = "NDL_24G"
 WIFI_PSWD = "RT-AC66U"
 
-# For the cubes game
-CUBES_GAME_TRIGGER = 10
-CUBES_GAME_SIZE = 5
-
 # For controller
-TRIGGER_ANGLE = 20
+DEFAULT_TRIGGER_ANGLE = 20
+
+# For the snake game
+SNAKE_GAME_DELAY = 0.6
+
+# For the pong game
+PONG_GAME_DELAY = 0.3
+
+# For the cubes game
+CUBES_TRIGGER_ANGLE = 2
+CUBES_GAME_SIZE = 4
 
 # For the matrix
 WIDTH = 64
