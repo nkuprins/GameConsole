@@ -44,8 +44,7 @@ class Server:
                 return client_socket
             except OSError as e:
                 if e.args[0] == errno.EAGAIN:
-                    # Signal the other task to run
-                    await asyncio.sleep(0.0)
+                    await asyncio.sleep(0.0) # yield other task
 
     # Read from this connection persistently and
     # execute callback function on received data
@@ -67,8 +66,7 @@ class Server:
                     self._callback(full_message)
             except OSError as e:
                 if e.args[0] == errno.EAGAIN:
-                    # Signal the other task to run
-                    await asyncio.sleep(0.0)
+                    await asyncio.sleep(0.0) # yield other task
 
     def _close_client(self, client_socket):
         if client_socket:

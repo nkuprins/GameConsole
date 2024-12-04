@@ -6,7 +6,7 @@ from properties.constants import WIDTH, HEIGHT, WORLD_SIZE
 from properties.direction import Direction
 from properties.color import Color
 
-# Class to setup the matrix and draw pixels
+# Class to set up the matrix and draw pixels
 class Matrix:
 
     def __init__(self):
@@ -38,6 +38,11 @@ class Matrix:
         tile_grid = displayio.TileGrid(self._bitmap, pixel_shader=self._palette)
         self._group.append(tile_grid)
         self._display.root_group = self._group
+
+    # Note: not tested yet
+    def load_image(self, file_path):
+        disk_bitmap = displayio.OnDiskBitmap(file_path)
+        return displayio.TileGrid(disk_bitmap, pixel_shader=displayio.ColorConverter())
 
     def object_append(self, obj):
         self._group.append(obj)
@@ -88,6 +93,9 @@ class Matrix:
         for x in range(0, WIDTH):
             for y in range(0, HEIGHT):
                 self.draw_pixel(x, y, color)
+
+    def clear_display(self):
+        self.draw_background(Color.BLACK)
 
     # Draws a horizontal line at y coordinate with scaling factor
     def draw_horizontal_line(self, y, color):

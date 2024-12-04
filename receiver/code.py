@@ -1,6 +1,5 @@
 import asyncio
 import gc
-import time
 import board
 import buttons.buttons_controller as bc
 from display.matrix import Matrix
@@ -18,7 +17,7 @@ async def main1():
     # Set up the matrix
     matrix = Matrix()
 
-    # Set up and try to connect to wifi
+    # Set up and try to connect to Wi-Fi
     custom_wifi = CustomWiFi()
     if not custom_wifi.connect():
        return
@@ -26,7 +25,11 @@ async def main1():
     # Set up the server
     server_task = asyncio.create_task(Server(State.update_orientation).run())
     # Set up the console
-    console_task = asyncio.create_task(Console(matrix).run())
+    console_task = asyncio.create_task(
+        Console(matrix)
+        .with_logo()
+        .run()
+    )
 
     await asyncio.gather(server_task, console_task)
 

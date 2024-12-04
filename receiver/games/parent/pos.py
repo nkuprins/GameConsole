@@ -6,4 +6,4 @@ class Pos(Coords):
         super().__init__(x, y, world)
 
     def get_pos(self):
-        return (self._x, self._y)
+        return self._x, self._y

@@ -33,7 +33,7 @@ class Snake(EntityParent):
         new_y = self._y + y_speed
 
         if self._is_collided_with_body(new_x, new_y) or self._is_collided_with_border(new_x, new_y):
-            self._world.end_game()
+            self._world.end_game(True)
             return
 
         if self._is_collided_with_food(new_x, new_y):
@@ -54,7 +54,7 @@ class Snake(EntityParent):
         # Move it to old snake's head position
         if len(self._body) != 0:
             self._body[0] = (self._x, self._y)
-    
+
 
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:

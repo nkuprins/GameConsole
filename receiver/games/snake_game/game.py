@@ -1,14 +1,16 @@
 from games.snake_game.world import World
 from games.snake_game.view import View
+from games.parent.game_parent import GameParent
 from properties.direction import Direction
 from properties.constants import SNAKE_GAME_DELAY
 import asyncio
 
-class Game:
+class Game(GameParent):
 
     def __init__(self, matrix):
-        self._world = World()
-        self._view = View(self._world, matrix)
+        world = World()
+        view = View(world, matrix)
+        super().__init__(world, view)
 
     async def run(self):
         while self._world.is_running():
@@ -26,5 +28,5 @@ class Game:
             # Draw new game data
             self._view.draw_game(old_head, old_food, old_tail)
 
-            # Signal the other task to run and wait for some time
+            # Yield other task and wait
             await asyncio.sleep(SNAKE_GAME_DELAY)

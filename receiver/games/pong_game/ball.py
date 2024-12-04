@@ -23,7 +23,7 @@ class Ball(EntityParent):
             self._x_speed *= -1
             new_x = self._get_x_movement()
         elif self._is_collided_with_bottom_v(new_x):
-            self._world.end_game()
+            self._world.end_game(True)
             return
 
         self._x = new_x

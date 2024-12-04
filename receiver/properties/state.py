@@ -1,19 +1,16 @@
 class Phase:
     MENU = 0
     GAME_RUNNING = 1
-    GAME_OVER = 2
 
 class GameOption:
     SNAKE = 0
-    CUBES = 1
-    PONG = 2
+    PONG = 1
+    CUBES = 2
+    ALL_STR = ["SNAKE", "PONG", "CUBES"]
 
 class State:
     direction = None
     orientation = (0,0)
-
-    game = None
-    phase = Phase.MENU
 
     def update_direction(direction):
         State.direction = direction

@@ -2,14 +2,16 @@ import asyncio
 import time
 from games.pong_game.view import View
 from games.pong_game.world import World
+from games.parent.game_parent import GameParent
 from properties.direction import Direction
 from properties.constants import PONG_GAME_DELAY
 
-class Game:
+class Game(GameParent):
 
     def __init__(self, matrix):
-        self._world = World()
-        self._view = View(self._world, matrix)
+        world = World()
+        view = View(world, matrix)
+        super().__init__(world, view)
 
     async def run(self):
         start_time = time.monotonic()
@@ -36,7 +38,7 @@ class Game:
             # Draw new game data
             self._view.draw_game(old_platform, old_ball)
 
-            # Signal the other task to run and wait for some time
+            # Yield other task and wait
             await asyncio.sleep(max(PONG_GAME_DELAY - self._world.get_score() / 100, 0.05))
 
 
