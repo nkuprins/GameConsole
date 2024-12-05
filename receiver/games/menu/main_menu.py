@@ -1,6 +1,6 @@
 import asyncio
 import adafruit_display_text.label
-from properties.constants import WIDTH, HEIGHT
+from properties.constants import HEIGHT, CENTRE_X, CENTRE_Y
 from properties.color import Color
 from properties.direction import Direction
 from properties.state import GameOption
@@ -12,8 +12,8 @@ class MainMenu:
             font,
             color=0xff0000,
             text=GameOption.ALL_STR[0])
-        label.x = WIDTH / 2 - 5
-        label.y = HEIGHT / 2 - 5
+        label.x = CENTRE_X - 5
+        label.y = CENTRE_Y - 5
 
         self._idx = 0 # game option index
         self._matrix = matrix
@@ -58,21 +58,21 @@ class MainMenu:
         m = self._matrix
         c = Color.RED
         for i in range(5):
-            m.draw_pixel(WIDTH / 2, i, c)
-        m.draw_pixel(WIDTH / 2 - 1, 1, c)
-        m.draw_pixel(WIDTH / 2 - 2, 2, c)
-        m.draw_pixel(WIDTH / 2 + 1, 1, c)
-        m.draw_pixel(WIDTH / 2 + 2, 2, c)
+            m.draw_pixel(CENTRE_X, i, c)
+        m.draw_pixel(CENTRE_X - 1, 1, c)
+        m.draw_pixel(CENTRE_X - 2, 2, c)
+        m.draw_pixel(CENTRE_X + 1, 1, c)
+        m.draw_pixel(CENTRE_X + 2, 2, c)
 
     def _draw_arrow_down(self):
         m = self._matrix
         c = Color.RED
         for i in range(5):
-            m.draw_pixel(WIDTH / 2, HEIGHT - 1 - i, c)
-        m.draw_pixel(WIDTH / 2 - 1, HEIGHT - 2, c)
-        m.draw_pixel(WIDTH / 2 - 2, HEIGHT - 3, c)
-        m.draw_pixel(WIDTH / 2 + 1, HEIGHT - 2, c)
-        m.draw_pixel(WIDTH / 2 + 2, HEIGHT - 3, c)
+            m.draw_pixel(CENTRE_X, HEIGHT - 1 - i, c)
+        m.draw_pixel(CENTRE_X - 1, HEIGHT - 2, c)
+        m.draw_pixel(CENTRE_X - 2, HEIGHT - 3, c)
+        m.draw_pixel(CENTRE_X + 1, HEIGHT - 2, c)
+        m.draw_pixel(CENTRE_X + 2, HEIGHT - 3, c)
 
     def _draw_label(self):
         self._matrix.object_append(self._label)

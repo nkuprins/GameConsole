@@ -1,8 +1,8 @@
 # Game Console
 
 ## Structure
-- **Transmitter** - our game controller with gyroscope written in *CircuitPython*. It reads *z,y* axes and sends the data to the server using TCP.
-- **Receiver** - the core of our game console: games, display, server.
+- **Transmitter** - our game controller with gyroscope. It reads *z,y* axes and sends the data to the server using TCP.
+- **Receiver** - the core of our game console written in *CircuitPython*: games, display, server.
 
 ## Font
 

@@ -1,18 +1,21 @@
 import wifi
-from properties.constants import SSID, WIFI_PSWD
+
+# This file is git ignored and should be generated
+try:
+    from properties.secrets import SSID, WIFI_PSWD
+except ImportError:
+    SSID = "???"
+    WIFI_PSWD = "???"
+    print("ERROR: secrets are not defined")
 
 class CustomWiFi:
-
-    def __init__(self):
-        self._ssid = SSID
-        self._password = WIFI_PSWD
 
     def connect(self):
         #self._scan_networks()
 
         try:
-            wifi.radio.connect(self._ssid, self._password, timeout=10)
-            print("INFO: Connected to", self._ssid, "IP - ", wifi.radio.ipv4_address)
+            wifi.radio.connect(SSID, WIFI_PSWD, timeout=10)
+            print("INFO: Connected to", SSID, "IP - ", wifi.radio.ipv4_address)
             return True
         except ConnectionError as e:
             print("ERROR: Failed to connect to wifi - ", e)

@@ -16,12 +16,3 @@ class World(WorldBorder):
 
     def get_food(self):
         return self._food
-
-    def get_head_color(self):
-        return Color.BLUE
-
-    def get_body_color(self):
-        return Color.DARK_GREEN
-
-    def get_food_color(self):
-        return Color.RED

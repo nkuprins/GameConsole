@@ -12,9 +12,12 @@ class Matrix:
     def __init__(self):
         self._display = self._setup_display()
         self._group = displayio.Group()
+        self._display.root_group = self._group
         self._bitmap = displayio.Bitmap(self._display.width, self._display.height, Color.COLORS_COUNT)
         self._palette = self._setup_palette()
-        self._setup_root()
+        # Initial tile
+        tile_grid = displayio.TileGrid(self._bitmap, pixel_shader=self._palette)
+        self.object_append(tile_grid)
 
     def _setup_display(self):
         # To avoid screen not released bugs
@@ -33,11 +36,6 @@ class Matrix:
         for id, value in Color.colors():
             palette[id] = value
         return palette
-
-    def _setup_root(self):
-        tile_grid = displayio.TileGrid(self._bitmap, pixel_shader=self._palette)
-        self._group.append(tile_grid)
-        self._display.root_group = self._group
 
     # Note: not tested yet
     def load_image(self, file_path):

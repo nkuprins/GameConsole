@@ -16,6 +16,8 @@ async def main1():
 
     # Set up the matrix
     matrix = Matrix()
+    # Set up the console
+    console = Console(matrix).with_logo("/log.bmp")
 
     # Set up and try to connect to Wi-Fi
     custom_wifi = CustomWiFi()
@@ -24,12 +26,8 @@ async def main1():
 
     # Set up the server
     server_task = asyncio.create_task(Server(State.update_orientation).run())
-    # Set up the console
-    console_task = asyncio.create_task(
-        Console(matrix)
-        .with_logo()
-        .run()
-    )
+    # Run the console
+    console_task = asyncio.create_task(console.run())
 
     await asyncio.gather(server_task, console_task)
 

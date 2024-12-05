@@ -4,9 +4,7 @@
 #include <utility/imumaths.h>
 #include <ESP8266WiFi.h>
 
-// Set the delay between fresh samples
 #define BNO055_SAMPLERATE_DELAY_MS 200
-// Set the delay between new reconnection attempts
 #define RECONNECTION_DELAY_MS 100
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
@@ -38,9 +36,19 @@ void connect_to_server() {
   }
 }
 
+bool is_upside_down = false;
+
 void process_event(sensors_event_t event) {
   int z = event.orientation.z;
   int y = event.orientation.y; 
+
+  if (abs(y) > 70) {
+    is_upside_down = !is_upside_down;
+  }
+
+  if (is_upside_down || z > 90 || z < -90) {
+    y = -y;
+  }
   
   // When upside down we want to treat 180 as starting degree
   if (z > 90) {
@@ -48,15 +56,9 @@ void process_event(sensors_event_t event) {
   } else if (z < -90) {
     z = 180 + z;
   }
-
-  if (y > 90) {
-    y = -180 + y;
-  } else if (y < -90) {
-    y = 180 + y;
-  }
   
   String direction = "z:" + String(z) + ",y:" + String(y) + "*";
-  // client.print(direction);
+  client.print(direction);
   Serial.println("Sent: " + direction);
 }
 
@@ -64,8 +66,8 @@ void setup(void) {
   Serial.begin(115200);
   while (!Serial) delay(10);
 
-//  connect_to_wifi();
-//  connect_to_server();
+  connect_to_wifi();
+  connect_to_server();
 
   Serial.println("Orientation Sensor Test"); 
   Serial.println("");
@@ -80,17 +82,13 @@ void setup(void) {
 }
 
 void loop(void) {
-//  if (!client.connected()) {
-//    connect_to_server();
-//    delay(RECONNECTION_DELAY_MS);
-//  } else {
-//    sensors_event_t event;
-//    bno.getEvent(&event);
-//    process_event(event);
-//    delay(BNO055_SAMPLERATE_DELAY_MS);
-//  }
+  if (!client.connected()) {
+    connect_to_server();
+    delay(RECONNECTION_DELAY_MS);
+  } else {
     sensors_event_t event;
     bno.getEvent(&event);
     process_event(event);
     delay(BNO055_SAMPLERATE_DELAY_MS);
+  }
 }

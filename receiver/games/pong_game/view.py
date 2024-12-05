@@ -1,4 +1,6 @@
 from games.parent.view_border import ViewBorder
+from properties.constants import PONG_PLATFORM_COLOR, PONG_BALL_COLOR, PONG_PLATFORM_SIZE
+from properties.direction import Direction
 
 class View(ViewBorder):
 
@@ -7,12 +9,12 @@ class View(ViewBorder):
         # Draw platform
         matrix.draw_rectangle(
             world.get_platform().get_pos(),
-            world.get_platform_draw_size(),
-            world.get_platform_color(),
-            world.get_platform_draw_dir()
+            PONG_PLATFORM_SIZE,
+            PONG_PLATFORM_COLOR,
+            Direction.DOWN
         )
         # Draw ball
-        matrix.draw_square(world.get_ball().get_pos(), world.get_ball_color())
+        matrix.draw_square(world.get_ball().get_pos(), PONG_BALL_COLOR)
         matrix.refresh()
 
     def draw_game(self, old_platform, old_ball):
@@ -22,15 +24,15 @@ class View(ViewBorder):
         # Clear ball
         self._clear_sq_at_pos(old_ball)
         # Draw ball
-        m.draw_square(w.get_ball().get_pos(), w.get_ball_color())
+        m.draw_square(w.get_ball().get_pos(), PONG_BALL_COLOR)
 
         # Clear platform
         self._clear_rct_at_pos(old_platform, w.get_platform_draw_size(), w.get_platform_draw_dir())
         # Draw platform
         m.draw_rectangle(
             w.get_platform().get_pos(),
-            w.get_platform_draw_size(),
-            w.get_platform_color(),
-            w.get_platform_draw_dir()
+            PONG_PLATFORM_SIZE,
+            PONG_PLATFORM_COLOR,
+            Direction.DOWN
         )
         m.refresh()

@@ -18,15 +18,3 @@ class World(WorldBorder):
 
     def get_ball(self):
         return self._ball
-
-    def get_platform_color(self):
-        return Color.WHITE
-
-    def get_ball_color(self):
-        return Color.WHITE
-
-    def get_platform_draw_dir(self):
-        return Direction.DOWN
-
-    def get_platform_draw_size(self):
-        return 3

@@ -1,15 +1,19 @@
-# For the network
-SSID = "NDL_24G"
-WIFI_PSWD = "RT-AC66U"
+from properties.color import Color
 
 # For controller
 DEFAULT_TRIGGER_ANGLE = 20
 
 # For the snake game
 SNAKE_GAME_DELAY = 0.6
+SNAKE_HEAD_COLOR = Color.BLUE
+SNAKE_BODY_COLOR = Color.DARK_GREEN
+SNAKE_FOOD_COLOR = Color.RED
 
 # For the pong game
 PONG_GAME_DELAY = 0.3
+PONG_PLATFORM_SIZE = 3
+PONG_PLATFORM_COLOR = Color.WHITE
+PONG_BALL_COLOR = Color.WHITE
 
 # For the cubes game
 CUBES_TRIGGER_ANGLE = 5
@@ -19,6 +23,8 @@ CUBES_TIMEOUT = 10.0
 # For the matrix
 WIDTH = 64
 HEIGHT = 32
+CENTRE_X = int(WIDTH / 2)
+CENTRE_Y = int(HEIGHT / 2)
 
 # If size is 0, then the world has a default size, which is 1 pixel for main objects
 # For example, snake body part and head will be 1x1
