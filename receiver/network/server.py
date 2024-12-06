@@ -49,21 +49,39 @@ class Server:
     # Read from this connection persistently and
     # execute callback function on received data
     async def _handle_client(self, client_socket):
+
+        buffer = bytearray()
         while True:
             try:
-                temp_buffer = bytearray(100)
-                received = client_socket.recv_into(temp_buffer, 100)
+                temp_buffer = bytearray(50)
+                received = client_socket.recv_into(temp_buffer, 50)
                 if received == 0:
                     print("Client disconnected")
                     break
 
-                # Star sign is a delimiter for data
-                last_index = temp_buffer.rindex(b'*')
-                second_last_index = temp_buffer.rfind(b'*', 0, last_index)
+                last_start = temp_buffer.rfind(b'S')
+                last_end = temp_buffer.rfind(b'E', last_start)
 
-                if second_last_index != -1 and last_index != second_last_index:
-                    full_message = temp_buffer[second_last_index + 1:last_index].decode()
-                    self._callback(full_message)
+                if last_start != -1 and last_end == -1:
+                    # [S...]
+                    buffer.extend(temp_buffer[last_start + 1:received])
+                    continue
+                elif last_start == -1 and last_end == -1:
+                    # [...]
+                    buffer.extend(temp_buffer[:received])
+                    continue
+                elif last_start == -1 and last_end != -1:
+                    # [...E]
+                    buffer.extend(temp_buffer[:last_end])
+                else:
+                    # [S...E]
+                    buffer.extend(temp_buffer[last_start + 1:last_end])
+
+                # We can finish but can be more after E
+                self._callback(buffer.decode())
+                buffer.clear()
+                if last_end + 2 < received:
+                    buffer.extend(temp_buffer[last_end + 2:received])
             except OSError as e:
                 if e.args[0] == errno.EAGAIN:
                     await asyncio.sleep(0.0) # yield other task

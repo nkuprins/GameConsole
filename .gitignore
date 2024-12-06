@@ -1,2 +1,4 @@
 receiver/.idea/
 receiver/properties/secrets.py
+transmitter/secrets.h
+transmitter/secrets.cpp

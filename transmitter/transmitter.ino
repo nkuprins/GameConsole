@@ -3,6 +3,9 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <ESP8266WiFi.h>
+// This file is gitignored as it has secrets
+// Network SSID and PSWD should be defined
+#include "secrets.h"
 
 #define BNO055_SAMPLERATE_DELAY_MS 200
 #define RECONNECTION_DELAY_MS 100
@@ -11,8 +14,6 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 const char* server = "192.168.1.60";
 const uint16_t port = 80;
-const char* ssid = "NDL_24G";
-const char* password = "RT-AC66U"; 
 
 WiFiClient client;
 
@@ -56,8 +57,8 @@ void process_event(sensors_event_t event) {
   } else if (z < -90) {
     z = 180 + z;
   }
-  
-  String direction = "z:" + String(z) + ",y:" + String(y) + "*";
+
+  String direction = "Sz:" + String(z) + ",y:" + String(y) + "E";
   client.print(direction);
   Serial.println("Sent: " + direction);
 }
