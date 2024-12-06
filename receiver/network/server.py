@@ -51,37 +51,45 @@ class Server:
     async def _handle_client(self, client_socket):
 
         buffer = bytearray()
+        has_started = False
         while True:
             try:
-                temp_buffer = bytearray(50)
-                received = client_socket.recv_into(temp_buffer, 50)
+                temp_buffer = bytearray(40)
+                received = client_socket.recv_into(temp_buffer, 40)
                 if received == 0:
                     print("Client disconnected")
                     break
 
                 last_start = temp_buffer.rfind(b'S')
-                last_end = temp_buffer.rfind(b'E', last_start)
+                last_end = temp_buffer.find(b'E')
+                last_end_r = temp_buffer.rfind(b'E')
 
-                if last_start != -1 and last_end == -1:
+                if last_start != -1 and last_end_r != -1 and last_start < last_end_r:
+                    # [S...E]
+                    buffer.clear()
+                    buffer.extend(temp_buffer[last_start + 1:last_end_r])
+                elif last_start != -1 and \
+                        (last_end_r == -1 or (not has_started and last_end_r < last_start)):
                     # [S...]
                     buffer.extend(temp_buffer[last_start + 1:received])
+                    has_started = True
                     continue
-                elif last_start == -1 and last_end == -1:
-                    # [...]
-                    buffer.extend(temp_buffer[:received])
-                    continue
-                elif last_start == -1 and last_end != -1:
+                elif (last_start == -1 or has_started) and last_end != -1:
                     # [...E]
                     buffer.extend(temp_buffer[:last_end])
                 else:
-                    # [S...E]
-                    buffer.extend(temp_buffer[last_start + 1:last_end])
+                    # [...]
+                    buffer.extend(temp_buffer[:received])
+                    continue
 
                 # We can finish but can be more after E
                 self._callback(buffer.decode())
                 buffer.clear()
-                if last_end + 2 < received:
-                    buffer.extend(temp_buffer[last_end + 2:received])
+                has_started = False
+                if last_end_r + 1 < received:
+                    has_started = True
+                if last_end_r + 2 < received:
+                    buffer.extend(temp_buffer[last_end_r + 2:received])
             except OSError as e:
                 if e.args[0] == errno.EAGAIN:
                     await asyncio.sleep(0.0) # yield other task

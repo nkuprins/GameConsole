@@ -17,10 +17,14 @@ class State:
 
     # Input like: "z:10,y:-10"
     def update_orientation(data):
-        coords = data.split(",")
-        coord_z = coords[0].split(":")
-        coord_y = coords[1].split(":")
-        z = int(coord_z[1])
-        y = int(coord_y[1])
-        State.orientation = (z, y)
-        #print("State.orientation = ", State.orientation)
+        try:
+            coords = data.split(",")
+            coord_z = coords[0].split(":")
+            coord_y = coords[1].split(":")
+            z = int(coord_z[1])
+            y = int(coord_y[1])
+            State.orientation = (z, y)
+            # print("State.orientation = ", State.orientation)
+        except (IndexError, ValueError) as e:
+            print("ERROR: updating orientation: {e}")
+
