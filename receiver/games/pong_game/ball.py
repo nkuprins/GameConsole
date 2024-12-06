@@ -1,7 +1,7 @@
-from games.parent.entity_parent import EntityParent
+from games.parent.entity_collision import EntityCollision
 from properties.constants import WORLD_SIZE, PONG_PLATFORM_SIZE
 
-class Ball(EntityParent):
+class Ball(EntityCollision):
 
     def __init__(self, x, y, world):
         super().__init__(x, y, world)

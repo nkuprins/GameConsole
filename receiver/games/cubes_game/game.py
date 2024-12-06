@@ -14,7 +14,7 @@ class Game(GameParent):
         world = World()
         view = View(world, matrix)
         super().__init__(world, view)
-        self._cubes = self._world.get_cubes()
+        self._cubes = self._world.get_cubes() # to cache
 
     async def run(self):
         # Timer to exit game

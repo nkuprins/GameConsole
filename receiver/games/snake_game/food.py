@@ -1,6 +1,7 @@
+import random
 from games.parent.entity_parent import EntityParent
 from properties.constants import WORLD_SIZE, WIDTH, HEIGHT
-import random
+
 
 class Food(EntityParent):
 

@@ -1,6 +1,7 @@
-from games.parent.coords import Coords
+from games.parent.entity_parent import EntityParent
 
-class Cube(Coords):
+
+class Cube(EntityParent):
 
     def __init__(self, x, y, color, world):
         super().__init__(x, y, world)

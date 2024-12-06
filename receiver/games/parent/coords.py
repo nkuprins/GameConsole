@@ -1,10 +1,9 @@
 class Coords:
 
     # (x, y) is the anchor point
-    def __init__(self, x, y, world):
+    def __init__(self, x, y):
         self._x = x
         self._y = y
-        self._world = world
 
     def get_x(self):
         return self._x

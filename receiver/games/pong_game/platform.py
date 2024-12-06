@@ -2,6 +2,7 @@ from games.parent.entity_parent import EntityParent
 from properties.constants import HEIGHT, WORLD_SIZE, PONG_PLATFORM_SIZE
 from properties.direction import Direction
 
+
 class Platform(EntityParent):
 
     def __init__(self, x, y, world):
@@ -9,7 +10,7 @@ class Platform(EntityParent):
 
     def move(self, direction):
         if direction is None or \
-            direction == Direction.LEFT or direction == Direction.RIGHT:
+                direction == Direction.LEFT or direction == Direction.RIGHT:
             return
 
         new_y = self._y + Direction.to_speed(direction)[1]

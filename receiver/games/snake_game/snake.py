@@ -1,7 +1,8 @@
-from games.parent.entity_parent import EntityParent
+from games.parent.entity_collision import EntityCollision
 from properties.direction import Direction
 
-class Snake(EntityParent):
+
+class Snake(EntityCollision):
 
     def __init__(self, x, y, world):
         super().__init__(x, y, world)
@@ -37,7 +38,7 @@ class Snake(EntityParent):
             return
 
         if self._is_collided_with_food(new_x, new_y):
-            self._body.append((0,0))
+            self._body.append((0, 0))
             self._world.get_food().random_spawn()
             self._world.increase_score()
 
@@ -54,7 +55,6 @@ class Snake(EntityParent):
         # Move it to old snake's head position
         if len(self._body) != 0:
             self._body[0] = (self._x, self._y)
-
 
     def _is_collided_with_body(self, x, y):
         for body_part in self._body:
