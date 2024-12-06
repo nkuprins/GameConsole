@@ -1,13 +1,12 @@
-from games.snake_game.snake import Snake
+from games.parent.world_parent import WorldParent
 from games.snake_game.food import Food
-from games.parent.world_border import WorldBorder
+from games.snake_game.snake import Snake
 from properties.constants import HEIGHT, WORLD_SIZE
-from properties.color import Color
 
-class World(WorldBorder):
+class World(WorldParent):
 
     def __init__(self):
-        super().__init__(Color.BLACK, Color.ORANGE)
+        super().__init__()
         self._snake = Snake(WORLD_SIZE + 3, int(HEIGHT / 2), self)
         self._food = Food(11 + WORLD_SIZE, int(HEIGHT / 2), self)
 

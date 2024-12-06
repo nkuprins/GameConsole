@@ -1,10 +1,12 @@
 from games.parent.view_border import ViewBorder
-from properties.constants import SNAKE_HEAD_COLOR, SNAKE_BODY_COLOR, SNAKE_FOOD_COLOR
+from properties.constants import (SNAKE_HEAD_COLOR, SNAKE_BODY_COLOR,
+                                  SNAKE_FOOD_COLOR, SNAKE_BORDER_COLOR,
+                                  SNAKE_BACKGROUND_COLOR)
 
 class View(ViewBorder):
 
     def __init__(self, world, matrix):
-        super().__init__(world, matrix)
+        super().__init__(world, matrix, SNAKE_BACKGROUND_COLOR, SNAKE_BORDER_COLOR)
         # Draw snake head
         matrix.draw_square(world.get_snake().get_head(), SNAKE_HEAD_COLOR)
         # Draw food

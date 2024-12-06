@@ -1,9 +1,11 @@
 from games.parent.view_parent import ViewParent
+from properties.constants import CUBES_BACKGROUND_COLOR
+
 
 class View(ViewParent):
 
     def __init__(self, world, matrix):
-        super().__init__(world, matrix)
+        super().__init__(world, matrix, CUBES_BACKGROUND_COLOR)
         self._draw_cubes()
         matrix.refresh()
 

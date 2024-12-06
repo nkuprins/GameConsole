@@ -6,7 +6,7 @@ from properties.constants import CENTRE_X, CENTRE_Y, CUBES_GAME_SIZE, CUBES_TRIG
 
 class World(WorldParent):
     def __init__(self):
-        super().__init__(Color.BLACK)
+        super().__init__()
 
         # Initializes 2 maps for the acceleration functionality
         self._setup_acceleration()

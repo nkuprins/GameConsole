@@ -1,11 +1,13 @@
 from games.parent.view_border import ViewBorder
-from properties.constants import PONG_PLATFORM_COLOR, PONG_BALL_COLOR, PONG_PLATFORM_SIZE
 from properties.direction import Direction
+from properties.constants import (PONG_PLATFORM_COLOR, PONG_BALL_COLOR,
+                                  PONG_PLATFORM_SIZE, PONG_BACKGROUND_COLOR,
+                                  PONG_BORDER_COLOR)
 
 class View(ViewBorder):
 
     def __init__(self, world, matrix):
-        super().__init__(world, matrix)
+        super().__init__(world, matrix, PONG_BACKGROUND_COLOR, PONG_BORDER_COLOR)
         # Draw platform
         matrix.draw_rectangle(
             world.get_platform().get_pos(),
