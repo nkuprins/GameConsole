@@ -2,7 +2,7 @@ import random
 from games.cubes_game.cube import Cube
 from games.parent.world_parent import WorldParent
 from properties.color import Color
-from properties.constants import CENTRE_X, CENTRE_Y, CUBES_GAME_SIZE, CUBES_TRIGGER_ANGLE
+from properties.constants import CENTRE_X, CENTRE_Y, CUBES_GAME_SIZE, CUBES_TRIGGER_Y
 
 class World(WorldParent):
     def __init__(self):
@@ -20,12 +20,12 @@ class World(WorldParent):
 
     def _setup_acceleration(self):
         accelerate_map = {} # contains 5 booleans for orientation(z,y) values
-        for orientation_axis in range(CUBES_TRIGGER_ANGLE, 92):
+        for orientation_axis in range(CUBES_TRIGGER_Y, 92):
             accelerate_map[orientation_axis] = [self._random_accelerate(orientation_axis) for _ in range(5)]
         self._accelerate_map = accelerate_map
 
         index_map = {} # contains index for accelerate_map for orientation(z,y) values
-        for orientation_axis in range(CUBES_TRIGGER_ANGLE, 92):
+        for orientation_axis in range(CUBES_TRIGGER_Y, 92):
             index_map[orientation_axis] = 0
         self._index_map = index_map
 

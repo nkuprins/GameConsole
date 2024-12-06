@@ -73,12 +73,16 @@ class Matrix:
 
     # Draws rectangle with number of squares and direction down or right
     def draw_rectangle(self, top_left, squares_num, color, direction):
+        self.draw_custom_rectangle(top_left, WORLD_SIZE, squares_num, color, direction)
+
+    # Draws custom rectangle with custom size(width/height)
+    def draw_custom_rectangle(self, top_left, size, squares_num, color, direction):
         x_move = 0
         y_move = 0
         if direction == Direction.DOWN:
-            y_move = WORLD_SIZE + 1
+            y_move = size + 1
         elif direction == Direction.RIGHT:
-            x_move = WORLD_SIZE + 1
+            x_move = size + 1
         else:
             return
 

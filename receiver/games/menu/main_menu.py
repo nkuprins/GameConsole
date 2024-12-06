@@ -12,8 +12,8 @@ class MainMenu:
             font,
             color=0xff0000,
             text=GameOption.ALL_STR[0])
-        label.x = CENTRE_X - 5
-        label.y = CENTRE_Y - 5
+        label.x = CENTRE_X - 10
+        label.y = CENTRE_Y
 
         self._idx = 0 # game option index
         self._matrix = matrix
@@ -25,6 +25,7 @@ class MainMenu:
     # Right selects the game
     async def select(self):
         self._draw()
+        await asyncio.sleep(3.0) # let the user process the info
 
         while True:
             direction = Direction.from_orientation()
@@ -34,12 +35,12 @@ class MainMenu:
             elif direction == Direction.DOWN:
                 self._update_idx(self._idx - 1)
                 self._label.text = GameOption.ALL_STR[self._idx]
-            elif direction == Direction.RIGHT:
+            elif direction is not None:
                 self._clear_label()
                 return self._idx
 
             self._matrix.refresh()
-            await asyncio.sleep(0.0) # yield other task
+            await asyncio.sleep(1.5) # yield other task
 
     def _update_idx(self, new_idx):
         limit = len(GameOption.ALL_STR) - 1
@@ -53,26 +54,23 @@ class MainMenu:
         self._draw_arrow_up()
         self._draw_arrow_down()
         self._draw_label()
+        self._matrix.refresh()
 
     def _draw_arrow_up(self):
         m = self._matrix
         c = Color.RED
-        for i in range(5):
+        for i in range(8):
             m.draw_pixel(CENTRE_X, i, c)
-        m.draw_pixel(CENTRE_X - 1, 1, c)
-        m.draw_pixel(CENTRE_X - 2, 2, c)
-        m.draw_pixel(CENTRE_X + 1, 1, c)
-        m.draw_pixel(CENTRE_X + 2, 2, c)
+        for i in range(-3, 4):
+            m.draw_pixel(CENTRE_X + i, abs(i), c)
 
     def _draw_arrow_down(self):
         m = self._matrix
         c = Color.RED
-        for i in range(5):
+        for i in range(8):
             m.draw_pixel(CENTRE_X, HEIGHT - 1 - i, c)
-        m.draw_pixel(CENTRE_X - 1, HEIGHT - 2, c)
-        m.draw_pixel(CENTRE_X - 2, HEIGHT - 3, c)
-        m.draw_pixel(CENTRE_X + 1, HEIGHT - 2, c)
-        m.draw_pixel(CENTRE_X + 2, HEIGHT - 3, c)
+        for i in range(-3, 4):
+            m.draw_pixel(CENTRE_X + i, HEIGHT - 1 - abs(i), c)
 
     def _draw_label(self):
         self._matrix.object_append(self._label)

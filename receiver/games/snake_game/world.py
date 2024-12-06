@@ -9,7 +9,7 @@ class World(WorldBorder):
     def __init__(self):
         super().__init__(Color.BLACK, Color.ORANGE)
         self._snake = Snake(WORLD_SIZE + 3, int(HEIGHT / 2), self)
-        self._food = Food(10 + WORLD_SIZE, int(HEIGHT / 2), self)
+        self._food = Food(11 + WORLD_SIZE, int(HEIGHT / 2), self)
 
     def get_snake(self):
         return self._snake

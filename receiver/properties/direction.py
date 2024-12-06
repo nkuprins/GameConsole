@@ -1,4 +1,4 @@
-from properties.constants import DEFAULT_TRIGGER_ANGLE, WORLD_SIZE
+from properties.constants import DEFAULT_TRIGGER_Z, DEFAULT_TRIGGER_Y, WORLD_SIZE
 from properties.state import State
 
 class Direction:
@@ -33,13 +33,11 @@ class Direction:
 
     def from_orientation():
         z, y = State.orientation
-        best = max(z, y, key=abs)
-
-        if abs(best) >= DEFAULT_TRIGGER_ANGLE:
-            if best == z:
-                return Direction.LEFT if z > 0 else Direction.RIGHT
-            else:
-                return Direction.UP if y > 0 else Direction.DOWN
+        delta = DEFAULT_TRIGGER_Z - DEFAULT_TRIGGER_Y
+        if abs(z) > abs(y) + delta and abs(z) > DEFAULT_TRIGGER_Z:
+            return Direction.LEFT if z > 0 else Direction.RIGHT
+        elif abs(y) > DEFAULT_TRIGGER_Y:
+            return Direction.UP if y > 0 else Direction.DOWN
         return None
 
     def to_speed(dir):

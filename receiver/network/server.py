@@ -54,8 +54,8 @@ class Server:
         has_started = False
         while True:
             try:
-                temp_buffer = bytearray(40)
-                received = client_socket.recv_into(temp_buffer, 40)
+                temp_buffer = bytearray(25)
+                received = client_socket.recv_into(temp_buffer, 25)
                 if received == 0:
                     print("Client disconnected")
                     break
@@ -66,7 +66,7 @@ class Server:
 
                 if last_start != -1 and last_end_r != -1 and last_start < last_end_r:
                     # [S...E]
-                    buffer.clear()
+                    buffer = bytearray()
                     buffer.extend(temp_buffer[last_start + 1:last_end_r])
                 elif last_start != -1 and \
                         (last_end_r == -1 or (not has_started and last_end_r < last_start)):
@@ -84,7 +84,7 @@ class Server:
 
                 # We can finish but can be more after E
                 self._callback(buffer.decode())
-                buffer.clear()
+                buffer = bytearray()
                 has_started = False
                 if last_end_r + 1 < received:
                     has_started = True

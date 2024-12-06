@@ -41,6 +41,7 @@ class GameOver:
     # Right is game restart
     async def select(self):
         self._draw()
+        await asyncio.sleep(3.0) # let the user process the info
 
         while True:
             direction = Direction.from_orientation()

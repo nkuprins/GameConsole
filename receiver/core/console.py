@@ -16,6 +16,7 @@ class Console:
         print("Showing game logo...")
         self._img = self._matrix.load_image(file_path)
         self._matrix.object_append(self._img)
+        self._matrix.refresh()
         return self
 
     async def run(self):
@@ -52,4 +53,3 @@ class Console:
             game = cg.Game(self._matrix)
         await game.run()
         return game.get_world().has_lost(), game.get_world().get_score()
-

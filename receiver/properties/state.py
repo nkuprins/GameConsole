@@ -24,7 +24,7 @@ class State:
             z = int(coord_z[1])
             y = int(coord_y[1])
             State.orientation = (z, y)
-            # print("State.orientation = ", State.orientation)
+            print("State.orientation = ", State.orientation)
         except (IndexError, ValueError) as e:
             print("ERROR: updating orientation: {e}")
 

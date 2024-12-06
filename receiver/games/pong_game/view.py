@@ -27,7 +27,7 @@ class View(ViewBorder):
         m.draw_square(w.get_ball().get_pos(), PONG_BALL_COLOR)
 
         # Clear platform
-        self._clear_rct_at_pos(old_platform, w.get_platform_draw_size(), w.get_platform_draw_dir())
+        self._clear_rct_at_pos(old_platform, PONG_PLATFORM_SIZE, Direction.DOWN)
         # Draw platform
         m.draw_rectangle(
             w.get_platform().get_pos(),

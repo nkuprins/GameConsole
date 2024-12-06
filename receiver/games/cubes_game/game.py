@@ -3,7 +3,7 @@ import time
 from games.cubes_game.view import View
 from games.cubes_game.world import World
 from games.parent.game_parent import GameParent
-from properties.constants import CUBES_TRIGGER_ANGLE, CUBES_TIMEOUT, WIDTH, HEIGHT
+from properties.constants import CUBES_TRIGGER_Z, CUBES_TRIGGER_Y, CUBES_TIMEOUT, WIDTH, HEIGHT
 from properties.state import State
 
 # This game may have slightly different structure of the code
@@ -25,8 +25,8 @@ class Game(GameParent):
         while self._world.is_running():
             z, y = State.orientation
             # Determine speed based on orientation
-            x_speed = -1 if z > CUBES_TRIGGER_ANGLE else 1 if z < -CUBES_TRIGGER_ANGLE else 0
-            y_speed = -1 if y > CUBES_TRIGGER_ANGLE else 1 if y < -CUBES_TRIGGER_ANGLE else 0
+            x_speed = -1 if z > CUBES_TRIGGER_Z else 1 if z < -CUBES_TRIGGER_Z else 0
+            y_speed = -1 if y > CUBES_TRIGGER_Y else 1 if y < -CUBES_TRIGGER_Y else 0
 
             # If no speed, then check for timeout
             if x_speed == 0 and y_speed == 0:
@@ -37,6 +37,7 @@ class Game(GameParent):
                 elapsed_time = time.monotonic() - start_time
                 if elapsed_time > CUBES_TIMEOUT:
                     self._world.end_game(False)
+                    return
 
                 await asyncio.sleep(0.0) # yield other task
                 continue

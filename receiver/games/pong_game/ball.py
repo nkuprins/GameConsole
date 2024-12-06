@@ -1,5 +1,5 @@
 from games.parent.entity_parent import EntityParent
-from properties.constants import WORLD_SIZE
+from properties.constants import WORLD_SIZE, PONG_PLATFORM_SIZE
 
 class Ball(EntityParent):
 
@@ -38,7 +38,7 @@ class Ball(EntityParent):
     def _is_collided_with_platform(self, x, y):
         platform_x, platform_y = self._world.get_platform().get_pos()
 
-        for i in range(self._world.get_platform_draw_size()):
+        for i in range(PONG_PLATFORM_SIZE):
             new_pos = (platform_x, platform_y + i * (WORLD_SIZE + 1))
             if self._is_collided_with_pos((x, y), new_pos):
                 return True

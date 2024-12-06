@@ -4,7 +4,7 @@
 #include <utility/imumaths.h>
 #include <ESP8266WiFi.h>
 // This file is gitignored as it has secrets
-// Network SSID and PSWD should be defined
+// Network SSID and PSWD should be defined in it
 #include "secrets.h"
 
 #define BNO055_SAMPLERATE_DELAY_MS 200
@@ -14,6 +14,8 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 const char* server = "192.168.1.60";
 const uint16_t port = 80;
+bool is_upside_down = false;
+unsigned long upside_down_triggered_at;
 
 WiFiClient client;
 
@@ -31,23 +33,26 @@ void connect_to_wifi() {
 void connect_to_server() {
   Serial.println("Connecting to server...");
   if (client.connect(server, port)) {
+    client.setNoDelay(true);
     Serial.println("Connected to server");
   } else {
     Serial.println("Failed to connect to server");
   }
 }
 
-bool is_upside_down = false;
+
 
 void process_event(sensors_event_t event) {
   int z = event.orientation.z;
   int y = event.orientation.y; 
 
-  if (abs(y) > 70) {
+  unsigned long elapsed = millis() - upside_down_triggered_at;
+  if (abs(y) > 60 && elapsed >= 2000) {
     is_upside_down = !is_upside_down;
+    upside_down_triggered_at = millis();
   }
 
-  if (is_upside_down || z > 90 || z < -90) {
+  if (is_upside_down && (z > 90 || z < -90 || z == 0)) {
     y = -y;
   }
   
@@ -69,9 +74,6 @@ void setup(void) {
 
   connect_to_wifi();
   connect_to_server();
-
-  Serial.println("Orientation Sensor Test"); 
-  Serial.println("");
 
   if (!bno.begin()) {
     Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
