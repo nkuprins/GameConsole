@@ -41,13 +41,13 @@ async def main2():
     # Set up the matrix
     matrix = Matrix()
 
-    # Set up the console
-    console_task = asyncio.create_task(Console(matrix).run())
     # Set up the buttons
-    controller_task = asyncio.create_task(
+    buttons_task = asyncio.create_task(
         bc.run(bc.create_buttons(), State.update_direction)
     )
+    # Set up the console
+    console_task = asyncio.create_task(Console(matrix).run())
 
-    await asyncio.gather(controller_task, console_task)
+    await asyncio.gather(buttons_task, console_task)
 
 asyncio.run(main1())
