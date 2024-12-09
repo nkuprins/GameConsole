@@ -21,4 +21,4 @@ class View(ViewParent):
         self._matrix.refresh()
 
     def has_cube(self, new_x, new_y):
-        return not self._matrix.has_color(new_x, new_y, self._world.get_background_color())
+        return not self._matrix.has_color(new_x, new_y, CUBES_BACKGROUND_COLOR)

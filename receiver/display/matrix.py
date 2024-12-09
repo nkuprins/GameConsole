@@ -37,7 +37,6 @@ class Matrix:
             palette[id] = value
         return palette
 
-    # Note: not tested yet
     def load_image(self, file_path):
         disk_bitmap = displayio.OnDiskBitmap(file_path)
         return displayio.TileGrid(disk_bitmap, pixel_shader=displayio.ColorConverter())

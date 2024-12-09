@@ -25,7 +25,7 @@ class MainMenu:
     # Right selects the game
     async def select(self):
         self._draw()
-        await asyncio.sleep(3.0) # let the user process the info
+        await asyncio.sleep(2.0) # let the user process the info
 
         while True:
             direction = Direction.from_orientation()
@@ -40,7 +40,7 @@ class MainMenu:
                 return self._idx
 
             self._matrix.refresh()
-            await asyncio.sleep(1.5) # yield other task
+            await asyncio.sleep(1.0) # yield other task
 
     def _update_idx(self, new_idx):
         limit = len(GameOption.ALL_STR) - 1
