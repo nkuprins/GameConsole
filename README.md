@@ -1,5 +1,15 @@
 # Game Console
 
+## 2 in 1
+
+### Remote like Wii
+
+![](video_remote.mp4)
+
+### Handles like a tablet
+
+![](video_handles.mp4)
+
 ## Structure
 - **Transmitter** - our game controller with gyroscope. It reads *z,y* axes and sends the data to the server using TCP.
 - **Receiver** - the core of our game console written in *CircuitPython*: games, display, server.
