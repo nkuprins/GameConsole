@@ -2,13 +2,13 @@
 
 ## 2 in 1
 
-### Remote like Wii
+### Remote - like a Wii
 
-![](video_remote.mp4)
+https://github.com/user-attachments/assets/b069649b-1057-4249-8fb9-615e8abe9ee3
 
-### Handles like a tablet
+### Handles - like a tablet
 
-![](video_handles.mp4)
+https://github.com/user-attachments/assets/6c2ca183-1235-49df-b584-fd6e376e30a9
 
 ## Structure
 - **Transmitter** - our game controller with gyroscope. It reads *z,y* axes and sends the data to the server using TCP.
